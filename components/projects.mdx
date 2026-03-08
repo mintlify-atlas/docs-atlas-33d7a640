@@ -1,0 +1,223 @@
+---
+title: Projects Component
+description: Showcase section for featured portfolio projects with live demos and source code links
+---
+
+## Overview
+
+The Projects component displays a grid of featured projects with images, descriptions, tech stacks, and action buttons linking to live demos and GitHub repositories.
+
+## Purpose
+
+- Showcase best portfolio projects
+- Provide project descriptions and context
+- Display technology stacks used
+- Link to live demos and source code
+- Enable responsive card-based layout
+
+## Component Structure
+
+```typescript projects.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-projects',
+  imports: [],
+  templateUrl: './projects.html',
+  styleUrl: './projects.css'
+})
+export class Projects {
+
+}
+```
+
+<Note>
+The Projects component is presentational with no TypeScript logic. Project data is currently hardcoded in the template.
+</Note>
+
+## Featured Projects
+
+### 1. Sistema de Gestión de Inventario
+
+**Description**: Web application for managing raw material inventory with entry/exit tracking, critical level alerts, and statistical reports.
+
+**Tech Stack**: Angular, Node.js, Docker, SonarCloud, AWS, PostgreSQL, Spring Boot
+
+**Links**:
+- Live Demo: http://3.148.190.86:9500/
+- GitHub: https://github.com/JhonnyDiaz4753/Aplicaci-nWeb
+
+### 2. Space Shooter
+
+**Description**: 2D arcade-style game in JavaScript where players pilot a spaceship and face enemy waves with different attack patterns. Includes scoring, collisions, and animations.
+
+**Tech Stack**: HTML5 Canvas, JavaScript (ES6), CSS, Vite
+
+**Links**:
+- Live Demo: https://jhonnydiaz4753.github.io/spaceShooter/
+- GitHub: https://github.com/jhonnydiaz4753/spaceShooter
+
+## Project Card Structure
+
+```html
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+  <!-- Project Card -->
+  <div class="flex flex-col rounded-xl overflow-hidden bg-white dark:bg-background-dark shadow-md border border-gray-200 dark:border-primary/20 hover:shadow-lg transition-shadow">
+    
+    <!-- Project Image -->
+    <div class="w-full bg-center bg-no-repeat aspect-video bg-cover"
+         style="background-image: url('...')">
+    </div>
+    
+    <!-- Project Content -->
+    <div class="flex flex-col gap-4 p-6 flex-grow">
+      <!-- Title -->
+      <h3 class="text-lg font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-white">
+        Sistema de Gestión de Inventario
+      </h3>
+      
+      <!-- Description -->
+      <p class="text-gray-600 dark:text-gray-300 text-sm font-normal leading-normal flex-grow">
+        Aplicación web para administrar el inventario de materia prima...
+      </p>
+      
+      <!-- Tech Stack -->
+      <p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal">
+        Tecnologías: Angular, Node.js, Docker, SonarCloud, AWS, PostgreSQL, Spring Boot
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-3 mt-auto">
+        <a href="..." class="flex-1...">
+          <span>Ver Proyecto</span>
+        </a>
+        <a href="..." class="flex-1...">
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+## Card Components
+
+### Project Image
+
+```html
+<!-- Background image approach -->
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover"
+     style="background-image: url('https://cdn-icons-png.flaticon.com/512/2821/2821637.png')">
+</div>
+
+<!-- Or img tag approach -->
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover">
+  <img src="/images/spaceShooter.png"
+       alt="Space Shooter Game - Videojuego arcade 2D"
+       class="w-full h-full object-cover object-center"
+       loading="lazy" />
+</div>
+```
+
+<Tip>
+The `aspect-video` class maintains a 16:9 aspect ratio for consistent card heights across different image sizes.
+</Tip>
+
+### Action Buttons
+
+```html
+<div class="flex gap-3 mt-auto">
+  <!-- Live Demo Button -->
+  <a href="http://3.148.190.86:9500/"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="flex-1 flex items-center justify-center gap-2 px-4 h-10 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm dark:bg-blue-500 dark:hover:bg-blue-600">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <!-- External link icon -->
+    </svg>
+    <span>Ver Proyecto</span>
+  </a>
+
+  <!-- GitHub Button -->
+  <a href="https://github.com/JhonnyDiaz4753/Aplicaci-nWeb"
+     target="_blank"
+     rel="noopener noreferrer"
+     class="flex-1 flex items-center justify-center gap-2 px-4 h-10 bg-gray-900 dark:bg-gray-800 text-white rounded-lg text-sm font-semibold hover:bg-gray-800 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm">
+    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+      <!-- GitHub icon -->
+    </svg>
+    <span>GitHub</span>
+  </a>
+</div>
+```
+
+## Layout & Responsiveness
+
+### Grid System
+
+- Mobile: Single column (`grid-cols-1`)
+- Tablet+: Two columns (`md:grid-cols-2`)
+- Gap: `gap-8` provides spacing between cards
+
+### Card Layout
+
+- `flex-col` for vertical stacking
+- `flex-grow` on description allows variable content length
+- `mt-auto` pushes action buttons to bottom
+- Equal flex-1 widths on buttons for 50/50 split
+
+## Interactive Elements
+
+### Hover Effects
+
+- Card: `hover:shadow-lg` - Enhanced shadow on hover
+- Buttons: `hover:scale-[1.02]` - Subtle scale up
+- Buttons: `active:scale-[0.98]` - Feedback on click
+
+### Transitions
+
+- Card shadow: `transition-shadow`
+- Buttons: `transition-all duration-200`
+
+<Note>
+All external links include `target="_blank"` and `rel="noopener noreferrer"` for security and proper behavior.
+</Note>
+
+## Accessibility
+
+- Semantic structure with proper heading hierarchy
+- Descriptive alt text on images
+- Clear link labels
+- SVG icons with proper viewBox attributes
+
+## Tech Stack Display
+
+Each project card includes a small-text tech stack indicator:
+
+```html
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal">
+  Tecnologías: Angular, Node.js, Docker, SonarCloud, AWS, PostgreSQL, Spring Boot
+</p>
+```
+
+## Future Enhancements
+
+<Tip>
+Consider moving project data to a TypeScript array in the component for easier management:
+
+```typescript
+projects = [
+  {
+    title: 'Sistema de Gestión de Inventario',
+    description: '...',
+    image: '...',
+    techStack: ['Angular', 'Node.js', 'Docker', ...],
+    demoUrl: '...',
+    githubUrl: '...'
+  },
+  // ...
+];
+```
+
+Then use `*ngFor` in the template to render cards dynamically.
+</Tip>

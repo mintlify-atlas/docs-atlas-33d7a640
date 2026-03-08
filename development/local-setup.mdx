@@ -1,0 +1,153 @@
+---
+title: Local Development Setup
+description: Complete guide to setting up the portfolio project for local development
+---
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+- **Node.js**: Version 20.x or later (LTS recommended)
+- **Angular CLI**: Version 20.3.4
+- **npm**, **yarn**, **pnpm**, or **bun**: Package manager of your choice
+
+<Note>
+This project uses Angular 20.3.0 with TypeScript 5.9.2 and includes Tailwind CSS 4.1.14 for styling.
+</Note>
+
+## Getting Started
+
+<Steps>
+  <Step title="Clone the repository">
+    First, clone the repository to your local machine:
+
+    ```bash
+    git clone <repository-url>
+    cd portafolio
+    ```
+  </Step>
+
+  <Step title="Install dependencies">
+    Install all required dependencies using your preferred package manager:
+
+    <CodeGroup>
+      ```bash npm
+      npm install
+      ```
+
+      ```bash yarn
+      yarn install
+      ```
+
+      ```bash pnpm
+      pnpm install
+      ```
+
+      ```bash bun
+      bun install
+      ```
+    </CodeGroup>
+
+    This will install all dependencies listed in `package.json`, including:
+    - Angular 20.3.0 framework
+    - Tailwind CSS 4.1.14
+    - Express for server-side rendering
+    - Testing tools (Karma, Jasmine)
+  </Step>
+
+  <Step title="Start the development server">
+    Launch the Angular development server:
+
+    <CodeGroup>
+      ```bash npm
+      npm start
+      ```
+
+      ```bash Angular CLI
+      ng serve
+      ```
+    </CodeGroup>
+
+    The application will be available at `http://localhost:4200/`. The development server includes hot module replacement, so changes to your code will automatically reload the browser.
+  </Step>
+
+  <Step title="Watch Tailwind CSS (Optional)">
+    If you need to watch Tailwind CSS changes separately, run:
+
+    ```bash
+    npm run tailwind:watch
+    ```
+
+    This command watches `src/styles.css` and outputs to `src/tailwind-output.css`.
+  </Step>
+</Steps>
+
+## Project Structure
+
+The project follows Angular's standard structure:
+
+```
+portafolio/
+├── src/
+│   ├── app/
+│   │   ├── components/      # Application components
+│   │   │   ├── about/
+│   │   │   ├── contact/
+│   │   │   ├── footer/
+│   │   │   ├── header/
+│   │   │   ├── hero/
+│   │   │   └── projects/
+│   │   ├── app.ts           # Root component
+│   │   ├── app.routes.ts    # Application routing
+│   │   └── app.config.ts    # Application configuration
+│   ├── main.ts              # Application entry point
+│   ├── main.server.ts       # SSR entry point
+│   ├── server.ts            # Express server configuration
+│   ├── styles.css           # Global styles
+│   └── index.html           # HTML template
+├── public/                  # Static assets
+├── dist/                    # Build output directory
+└── angular.json             # Angular workspace configuration
+```
+
+## Configuration Files
+
+### angular.json
+
+Defines the Angular workspace configuration, including build options, serve configuration, and test setup. Key configurations:
+
+- **sourceRoot**: `src/`
+- **outputMode**: `server` (enables SSR)
+- **prefix**: `app` (component selector prefix)
+
+### tsconfig.json
+
+TypeScript compiler configuration with strict mode enabled:
+
+- **target**: ES2022
+- **strict**: true
+- **experimentalDecorators**: true
+- Strict Angular compiler options enabled
+
+### package.json
+
+Defines project metadata, dependencies, and scripts. See [Building](/development/building) and [Testing](/development/testing) for available scripts.
+
+## Development Workflow
+
+Once the development server is running:
+
+1. **Access the application** at `http://localhost:4200/`
+2. **Edit source files** in the `src/` directory
+3. **View changes** automatically in the browser
+4. **Check the console** for compilation errors or warnings
+
+<Warning>
+Make sure to run `npm install` after pulling new changes that modify `package.json`.
+</Warning>
+
+## Next Steps
+
+- Learn about the [build process](/development/building)
+- Set up [testing](/development/testing) for your components
+- Explore the [project architecture](/architecture/overview)

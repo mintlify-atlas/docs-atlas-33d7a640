@@ -1,0 +1,218 @@
+---
+title: Building the Application
+description: Build configurations and output options for production and development
+---
+
+## Build Commands
+
+The project includes several build scripts defined in `package.json`:
+
+```json package.json
+{
+  "scripts": {
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "serve:ssr:portafolio": "node dist/portafolio/server/server.mjs"
+  }
+}
+```
+
+## Development Build
+
+For development builds with debugging capabilities:
+
+<CodeGroup>
+  ```bash npm
+  npm run watch
+  ```
+
+  ```bash Angular CLI
+  ng build --configuration development
+  ```
+</CodeGroup>
+
+### Development Configuration
+
+The development configuration (from `angular.json`) includes:
+
+```json angular.json
+{
+  "configurations": {
+    "development": {
+      "optimization": false,
+      "extractLicenses": false,
+      "sourceMap": true
+    }
+  }
+}
+```
+
+**Features:**
+- **No optimization**: Faster builds, easier debugging
+- **Source maps**: Map compiled code back to TypeScript source
+- **No license extraction**: Speeds up build time
+- **Watch mode**: Automatically rebuilds on file changes
+
+<Note>
+Use development builds for local testing and debugging. Source maps make it easier to trace errors to their source.
+</Note>
+
+## Production Build
+
+For optimized production builds:
+
+<CodeGroup>
+  ```bash npm
+  npm run build
+  ```
+
+  ```bash Angular CLI
+  ng build
+  ```
+</CodeGroup>
+
+### Production Configuration
+
+The production configuration is the **default** and includes:
+
+```json angular.json
+{
+  "defaultConfiguration": "production",
+  "configurations": {
+    "production": {
+      "budgets": [
+        {
+          "type": "initial",
+          "maximumWarning": "500kB",
+          "maximumError": "1MB"
+        },
+        {
+          "type": "anyComponentStyle",
+          "maximumWarning": "4kB",
+          "maximumError": "8kB"
+        }
+      ],
+      "outputHashing": "all"
+    }
+  }
+}
+```
+
+**Features:**
+- **Optimization**: Minification, tree-shaking, and dead code elimination
+- **Output hashing**: All files get content-based hashes for cache busting
+- **Bundle budgets**: Size limits to prevent bundle bloat
+- **License extraction**: Third-party licenses extracted to separate file
+
+<Warning>
+Production builds will **fail** if bundle sizes exceed the error thresholds:
+- Initial bundle: 1MB maximum
+- Component styles: 8kB maximum per component
+</Warning>
+
+## Bundle Budgets
+
+The project enforces size limits to maintain performance:
+
+| Bundle Type | Warning | Error |
+|-------------|---------|-------|
+| Initial bundle | 500kB | 1MB |
+| Component styles | 4kB | 8kB |
+
+**Initial bundle** includes:
+- Application code
+- Angular framework
+- Third-party dependencies
+- Runtime and polyfills
+
+**Component styles** tracks individual component CSS files.
+
+<Note>
+If you exceed budget warnings, consider:
+- Lazy loading feature modules
+- Analyzing bundle with `ng build --stats-json`
+- Removing unused dependencies
+- Using lighter alternatives to heavy libraries
+</Note>
+
+## Output Directory
+
+Builds are output to:
+
+```
+dist/portafolio/
+├── browser/          # Client-side application
+├── server/           # Server-side rendering files
+│   └── server.mjs    # Express server entry point
+└── ...
+```
+
+## Server-Side Rendering Build
+
+The project includes SSR (Server-Side Rendering) support:
+
+```json angular.json
+{
+  "options": {
+    "server": "src/main.server.ts",
+    "outputMode": "server",
+    "ssr": {
+      "entry": "src/server.ts"
+    }
+  }
+}
+```
+
+After building, you can serve the SSR application:
+
+```bash
+npm run serve:ssr:portafolio
+```
+
+This runs the Express server located at `dist/portafolio/server/server.mjs`.
+
+## Build Options
+
+### Watch Mode
+
+Automatically rebuild on file changes:
+
+```bash
+npm run watch
+```
+
+Use this during active development to see build errors in real-time without running the dev server.
+
+### Configuration Selection
+
+Manually specify a configuration:
+
+```bash
+ng build --configuration=development
+ng build --configuration=production
+```
+
+### Stats File
+
+Generate bundle analysis data:
+
+```bash
+ng build --stats-json
+```
+
+This creates `dist/portafolio/stats.json` which can be analyzed with tools like [webpack-bundle-analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer).
+
+## TypeScript Compilation
+
+The build uses TypeScript configuration from `tsconfig.app.json`, which extends the base `tsconfig.json`:
+
+- **Target**: ES2022
+- **Strict mode**: Enabled
+- **Experimental decorators**: Enabled for Angular
+- **Isolated modules**: True for faster builds
+
+## Next Steps
+
+- Learn about [testing](/development/testing) the application
+- Review [deployment options](/deployment/overview)
+- Understand the [project architecture](/architecture/overview)

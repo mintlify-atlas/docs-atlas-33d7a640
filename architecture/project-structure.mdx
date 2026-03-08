@@ -1,0 +1,240 @@
+---
+title: "Project Structure"
+description: "Understand the file and folder organization of the Jhonny Diaz Portfolio application"
+---
+
+## Overview
+
+The portfolio application follows Angular's standard project structure with a modern standalone component architecture. The project is built using Angular 19+ with server-side rendering (SSR) support and Tailwind CSS for styling.
+
+## Directory Tree
+
+```
+portafolio/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── about/
+│   │   │   │   ├── about.ts
+│   │   │   │   ├── about.html
+│   │   │   │   ├── about.css
+│   │   │   │   └── about.spec.ts
+│   │   │   ├── contact/
+│   │   │   │   ├── contact.ts
+│   │   │   │   ├── contact.html
+│   │   │   │   ├── contact.css
+│   │   │   │   └── contact.spec.ts
+│   │   │   ├── footer/
+│   │   │   │   ├── footer.ts
+│   │   │   │   ├── footer.html
+│   │   │   │   ├── footer.css
+│   │   │   │   └── footer.spec.ts
+│   │   │   ├── header/
+│   │   │   │   ├── header.ts
+│   │   │   │   ├── header.html
+│   │   │   │   ├── header.css
+│   │   │   │   └── header.spec.ts
+│   │   │   ├── hero/
+│   │   │   │   ├── hero.ts
+│   │   │   │   ├── hero.html
+│   │   │   │   ├── hero.css
+│   │   │   │   └── hero.spec.ts
+│   │   │   └── projects/
+│   │   │       ├── projects.ts
+│   │   │       ├── projects.html
+│   │   │       ├── projects.css
+│   │   │       └── projects.spec.ts
+│   │   ├── app.ts
+│   │   ├── app.html
+│   │   ├── app.css
+│   │   ├── app.spec.ts
+│   │   ├── app.config.ts
+│   │   ├── app.config.server.ts
+│   │   ├── app.routes.ts
+│   │   └── app.routes.server.ts
+│   ├── main.ts
+│   ├── main.server.ts
+│   ├── server.ts
+│   ├── index.html
+│   └── styles.css
+├── public/
+├── angular.json
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.spec.json
+├── tailwind.config.js
+├── package.json
+└── .postcssrc.json
+```
+
+## Major Directories
+
+### `/src/app/`
+
+The core application directory containing all Angular components, configuration, and routing files.
+
+**Key files:**
+- `app.ts` - Root application component
+- `app.config.ts` - Application configuration and providers
+- `app.routes.ts` - Client-side routing configuration
+- `app.routes.server.ts` - Server-side rendering routes
+
+### `/src/app/components/`
+
+Contains all standalone UI components. Each component follows a consistent structure with four files:
+
+- `.ts` - Component TypeScript class
+- `.html` - Component template
+- `.css` - Component styles
+- `.spec.ts` - Unit tests
+
+**Available components:**
+- **header** - Navigation and branding
+- **hero** - Landing section
+- **about** - About me section
+- **projects** - Portfolio projects showcase
+- **contact** - Contact form and information
+- **footer** - Footer with links and copyright
+
+### `/public/`
+
+Static assets like images, fonts, and downloadable files (e.g., CV/resume).
+
+## Configuration Files
+
+### angular.json
+
+The Angular workspace configuration file that defines build, serve, and test options.
+
+<CodeGroup>
+```json angular.json (Build Configuration)
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "projects": {
+    "portafolio": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+</CodeGroup>
+
+**Key features:**
+- Uses `@angular/build:application` builder
+- SSR enabled with `outputMode: "server"`
+- Entry points: `main.ts` (browser), `main.server.ts` (server)
+- Budget limits: 500kB warning, 1MB error for initial bundle
+
+### tsconfig.json
+
+TypeScript compiler configuration with strict mode enabled.
+
+<CodeGroup>
+```json tsconfig.json
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true,
+    "target": "ES2022",
+    "module": "preserve"
+  },
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}
+```
+</CodeGroup>
+
+**Key features:**
+- Strict mode enabled for type safety
+- ES2022 target for modern JavaScript features
+- Strict Angular compiler options
+
+### tailwind.config.js
+
+Tailwind CSS configuration with custom theme and dark mode support.
+
+<CodeGroup>
+```javascript tailwind.config.js
+module.exports = {
+  content: [
+    "./src/**/*.{html,ts}",
+  ],
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#1173d4",
+        background: {
+          light: "#f6f7f8",
+          dark: "#101922",
+        },
+      },
+      fontFamily: {
+        display: ["Inter", "sans-serif"],
+      },
+    },
+  },
+  plugins: [
+    require('@tailwindcss/forms'), 
+    require('@tailwindcss/container-queries')
+  ],
+}
+```
+</CodeGroup>
+
+**Key features:**
+- Class-based dark mode
+- Custom primary color: `#1173d4`
+- Custom background colors for light/dark themes
+- Inter font family
+- Tailwind plugins: forms and container queries
+
+## Entry Points
+
+### Browser Entry (`src/main.ts`)
+
+Bootstraps the Angular application in the browser.
+
+### Server Entry (`src/main.server.ts`)
+
+Bootstraps the application for server-side rendering.
+
+### SSR Server (`src/server.ts`)
+
+Express server configuration for handling SSR requests.
+
+## Build Output
+
+The build process generates:
+- **Browser bundle** - Client-side JavaScript and assets
+- **Server bundle** - Node.js server application for SSR
+- **Prerendered HTML** - Static HTML files for all routes
+
+<Info>
+The application uses Angular's new `@angular/build:application` builder which provides improved build performance and better optimization.
+</Info>

@@ -1,0 +1,156 @@
+---
+title: Header Component
+description: Sticky navigation header with logo, mobile menu toggle, and CV download functionality
+---
+
+## Overview
+
+The Header component provides a sticky navigation bar at the top of the portfolio. It features a responsive design with a mobile hamburger menu and a CV download button.
+
+## Purpose
+
+- Display site logo and developer name
+- Provide sticky navigation that remains visible on scroll
+- Enable CV download functionality
+- Support mobile-responsive menu toggle
+
+## Component Structure
+
+```typescript header.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-header',
+  imports: [ CommonModule ],
+  templateUrl: './header.html',
+  styleUrl: './header.css'
+})
+export class Header {
+  isMenuOpen = false;
+  
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  closeMenu(): void {
+    this.isMenuOpen = false;
+  }
+
+   downloadCV(): void {
+    const link = document.createElement('a');
+    link.href = 'CV/JhonnyDiazCenteno_CV_DesarolladorWeb.pdf';
+    link.download = 'JhonnyDiazCenteno_CV_DesarolladorWeb.pdf'; 
+    link.click();
+  }
+}
+```
+
+## Key Features
+
+### Mobile Menu State Management
+
+The component uses the `isMenuOpen` boolean to track mobile menu visibility:
+
+- `toggleMenu()` - Toggles the menu open/closed state
+- `closeMenu()` - Explicitly closes the menu (useful for navigation clicks)
+
+### CV Download
+
+The `downloadCV()` method programmatically creates and triggers a download link:
+
+```typescript
+downloadCV(): void {
+  const link = document.createElement('a');
+  link.href = 'CV/JhonnyDiazCenteno_CV_DesarolladorWeb.pdf';
+  link.download = 'JhonnyDiazCenteno_CV_DesarolladorWeb.pdf'; 
+  link.click();
+}
+```
+
+<Note>
+The CV file must be located in the `public/CV/` directory to be accessible.
+</Note>
+
+## HTML Structure
+
+### Desktop Navigation
+
+```html
+<nav class="hidden lg:flex items-center gap-6 xl:gap-8">
+  <button 
+    (click)="downloadCV()"
+    class="group relative flex items-center justify-center gap-2..."
+    aria-label="Descargar currículum vitae en formato PDF"
+  >
+    <svg class="w-4 h-4 transition-transform duration-300 group-hover:-translate-y-0.5">
+      <!-- Download icon -->
+    </svg>
+    <span class="hidden xl:inline">Descargar CV</span>
+    <span class="xl:hidden">CV</span>
+  </button>
+</nav>
+```
+
+### Mobile Menu Toggle
+
+```html
+<button
+  (click)="toggleMenu()"
+  class="lg:hidden p-2 rounded-lg..."
+  [attr.aria-label]="isMenuOpen ? 'Cerrar menú' : 'Abrir menú'"
+  [attr.aria-expanded]="isMenuOpen"
+>
+  <!-- Hamburger Icon -->
+  <svg *ngIf="!isMenuOpen" class="w-6 h-6">
+    <path d="M4 6h16M4 12h16M4 18h16"/>
+  </svg>
+  <!-- Close Icon -->
+  <svg *ngIf="isMenuOpen" class="w-6 h-6">
+    <path d="M6 18L18 6M6 6l12 12"/>
+  </svg>
+</button>
+```
+
+### Mobile Menu Panel
+
+```html
+<div
+  class="lg:hidden overflow-hidden transition-all duration-300 ease-in-out"
+  [class.max-h-96]="isMenuOpen"
+  [class.opacity-100]="isMenuOpen"
+  [class.max-h-0]="!isMenuOpen"
+  [class.opacity-0]="!isMenuOpen"
+>
+  <nav class="px-4 py-4 space-y-3...">
+    <button (click)="downloadCV()" class="...">
+      <span>Descargar CV</span>
+    </button>
+  </nav>
+</div>
+```
+
+## Responsive Behavior
+
+- **Desktop (lg+)**: Shows horizontal navigation with CV button
+- **Mobile (below lg)**: Shows hamburger menu that expands to reveal CV button
+- **Sticky positioning**: Header remains at top during scroll with backdrop blur effect
+
+<Tip>
+The header uses Angular's `CommonModule` for `*ngIf` directives to conditionally render the hamburger vs. close icon.
+</Tip>
+
+## Accessibility Features
+
+- Dynamic `aria-label` based on menu state
+- `aria-expanded` attribute for screen readers
+- Semantic `<header>` and `<nav>` elements
+- Focus states with ring utilities
+
+## Styling Highlights
+
+- Sticky positioning: `sticky top-0 z-50`
+- Backdrop blur: `backdrop-blur-sm`
+- Dark mode support: `dark:bg-background-dark/95`
+- Smooth transitions on menu open/close
+- Hover animations on CV button

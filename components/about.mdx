@@ -1,0 +1,123 @@
+---
+title: About Component
+description: Developer bio section highlighting skills and experience
+---
+
+## Overview
+
+The About component displays a professional biography section that introduces the developer's background, skills, and career focus.
+
+## Purpose
+
+- Provide detailed developer introduction
+- Highlight key technologies and skills
+- Emphasize practical experience and deployment capabilities
+- Showcase professional interests and goals
+
+## Component Structure
+
+```typescript about.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-about',
+  imports: [],
+  templateUrl: './about.html',
+  styleUrl: './about.css'
+})
+export class About {
+
+}
+```
+
+<Note>
+The About component is presentational only with no TypeScript logic beyond the basic component definition.
+</Note>
+
+## HTML Template
+
+```html
+<section class="py-10">
+  <h2 class="text-2xl font-bold leading-tight tracking-tight px-4 pb-4 text-gray-900 dark:text-white">
+    Sobre Mí
+  </h2>
+  <p class="text-gray-600 dark:text-gray-300 text-base font-normal leading-relaxed px-4">
+    Desarrollador web jr con conocimientos en Angular, Node.js, Spring Boot, PostgreSQL y Docker, 
+    enfocado en crear aplicaciones eficientes y escalables.
+    Cuento con experiencia práctica en el desarrollo de CRUD completos, consumo de APIs REST, 
+    integración de frontend y backend, y despliegue de aplicaciones en AWS EC2 y Vercel.
+    Apasionado por la tecnología, la optimización de interfaces y el aprendizaje continuo, 
+    busco aportar valor a equipos ágiles de desarrollo y proyectos innovadores.
+  </p>
+</section>
+```
+
+## Content Breakdown
+
+### Section Heading
+
+```html
+<h2 class="text-2xl font-bold leading-tight tracking-tight px-4 pb-4 text-gray-900 dark:text-white">
+  Sobre Mí
+</h2>
+```
+
+- Uses semantic `<h2>` tag
+- Bold, large text (24px)
+- Consistent padding with other sections
+
+### Biography Text
+
+The bio highlights three key areas:
+
+1. **Technical Stack**
+   - Frontend: Angular
+   - Backend: Node.js, Spring Boot
+   - Database: PostgreSQL
+   - DevOps: Docker
+
+2. **Practical Experience**
+   - Full CRUD development
+   - REST API consumption
+   - Frontend-backend integration
+   - Cloud deployment (AWS EC2, Vercel)
+
+3. **Professional Focus**
+   - Efficient and scalable applications
+   - Interface optimization
+   - Continuous learning
+   - Agile team collaboration
+
+## Typography
+
+- Readable line height: `leading-relaxed`
+- Base font size: `text-base` (16px)
+- Muted text color: `text-gray-600 dark:text-gray-300`
+- Consistent horizontal padding: `px-4`
+
+<Tip>
+The `leading-relaxed` class provides extra line height for better readability in longer paragraphs.
+</Tip>
+
+## Design Approach
+
+- **Simple and clean**: Single paragraph format keeps bio scannable
+- **Content-focused**: No distracting imagery or backgrounds
+- **Balanced spacing**: `py-10` on section provides breathing room
+
+## Dark Mode Support
+
+- Heading: `dark:text-white`
+- Body text: `dark:text-gray-300`
+- Maintains readability across themes
+
+## Use Case
+
+This component appears after the Hero section to provide visitors with:
+- Understanding of the developer's expertise
+- Insight into practical capabilities
+- Context for the projects showcase that follows
+
+<Note>
+The bio content can be easily updated by editing the paragraph text in the HTML template. Keep it concise (3-4 sentences) for best impact.
+</Note>

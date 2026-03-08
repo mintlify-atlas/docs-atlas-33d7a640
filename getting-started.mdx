@@ -1,0 +1,253 @@
+---
+title: Getting Started
+description: Set up and run the Jhonny Diaz Portfolio website on your local machine
+---
+
+This guide will help you get the portfolio running locally in just a few minutes.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+<CardGroup cols={3}>
+  <Card title="Node.js" icon="node">
+    Version 20.x or higher
+  </Card>
+  <Card title="npm/yarn/pnpm" icon="box">
+    Package manager of your choice
+  </Card>
+  <Card title="Angular CLI" icon="angular">
+    Version 20.3.4 or higher
+  </Card>
+</CardGroup>
+
+<Note>
+  This project uses Angular CLI version 20.3.4. You can install it globally with `npm install -g @angular/cli@20.3.4`
+</Note>
+
+## Installation
+
+<Steps>
+  <Step title="Clone the Repository">
+    Clone the portfolio repository to your local machine:
+    
+    ```bash
+    git clone <repository-url>
+    cd portafolio
+    ```
+  </Step>
+
+  <Step title="Install Dependencies">
+    Install the required dependencies using your preferred package manager:
+    
+    <CodeGroup>
+      ```bash npm
+      npm install
+      ```
+
+      ```bash yarn
+      yarn install
+      ```
+
+      ```bash pnpm
+      pnpm install
+      ```
+    </CodeGroup>
+
+    This will install all dependencies including:
+    - Angular 20.3.0
+    - Tailwind CSS 4.1.14
+    - Express 5.1.0
+    - RxJS 7.8.0
+    - And other required packages
+  </Step>
+
+  <Step title="Start Development Server">
+    Run the development server:
+    
+    <CodeGroup>
+      ```bash npm
+      npm start
+      ```
+
+      ```bash yarn
+      yarn start
+      ```
+
+      ```bash pnpm
+      pnpm start
+      ```
+
+      ```bash Angular CLI
+      ng serve
+      ```
+    </CodeGroup>
+
+    The application will be available at `http://localhost:4200/`. The development server automatically reloads when you modify source files.
+  </Step>
+</Steps>
+
+## Development Commands
+
+Here are the essential commands you'll use during development:
+
+### Start Development Server
+
+Run the local development server with hot reload:
+
+```bash
+npm start
+```
+
+This executes `ng serve` and starts the application at `http://localhost:4200/`.
+
+### Build for Production
+
+Create an optimized production build:
+
+```bash
+npm run build
+```
+
+This compiles the project and outputs the build artifacts to the `dist/` directory. The production build is optimized for performance and speed.
+
+### Watch Mode
+
+Build the project in development mode with file watching:
+
+```bash
+npm run watch
+```
+
+This runs `ng build --watch --configuration development` and automatically rebuilds when files change.
+
+### Run Tests
+
+Execute unit tests with Karma:
+
+```bash
+npm test
+```
+
+### Tailwind CSS Development
+
+Watch and compile Tailwind CSS during development:
+
+```bash
+npm run tailwind:watch
+```
+
+This monitors your styles and generates the Tailwind output CSS file.
+
+### Server-Side Rendering
+
+Run the SSR server after building:
+
+```bash
+npm run serve:ssr:portafolio
+```
+
+<Warning>
+  Make sure to build the project first with `npm run build` before running the SSR server.
+</Warning>
+
+## Project Structure
+
+After installation, you'll find the following structure:
+
+```
+portafolio/
+├── src/              # Source files
+│   ├── app/          # Angular components and services
+│   ├── styles.css    # Global styles and Tailwind imports
+│   ├── main.ts       # Client-side entry point
+│   ├── main.server.ts # Server-side entry point
+│   └── server.ts     # Express server configuration
+├── public/           # Static assets
+├── dist/             # Build output (generated)
+├── angular.json      # Angular CLI configuration
+├── tailwind.config.js # Tailwind CSS configuration
+├── tsconfig.json     # TypeScript configuration
+└── package.json      # Dependencies and scripts
+```
+
+## Configuration Files
+
+### Angular Configuration
+
+The project is configured in `angular.json` with:
+- **Source root**: `src/`
+- **Prefix**: `app`
+- **SSR enabled**: Server-side rendering with Express
+- **Output mode**: Server mode for SSR support
+
+### Tailwind Configuration
+
+Tailwind CSS v4 is configured with:
+- **Dark mode**: Class-based (`darkMode: "class"`)
+- **Custom colors**: Primary blue (`#1173d4`), custom background colors
+- **Font family**: Inter for display text
+- **Content paths**: `./src/**/*.{html,ts}`
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Component Architecture"
+    icon="puzzle-piece"
+    href="/architecture/components"
+  >
+    Learn about the standalone component structure
+  </Card>
+  <Card
+    title="Tailwind Setup"
+    icon="palette"
+    href="/styling/tailwind-setup"
+  >
+    Understand the Tailwind CSS v4 configuration
+  </Card>
+  <Card
+    title="Development"
+    icon="code"
+    href="/development/local-setup"
+  >
+    Best practices for developing features
+  </Card>
+  <Card
+    title="Deployment"
+    icon="cloud"
+    href="/deployment/overview"
+  >
+    Deploy the portfolio with SSR support
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+### Port Already in Use
+
+If port 4200 is already in use, you can specify a different port:
+
+```bash
+ng serve --port 4300
+```
+
+### Build Errors
+
+If you encounter build errors, try:
+
+1. Delete `node_modules` and reinstall dependencies
+2. Clear Angular cache: `ng cache clean`
+3. Ensure you're using Node.js version 20.x or higher
+
+### Tailwind Styles Not Loading
+
+If Tailwind styles aren't applied, make sure:
+
+1. The Tailwind watch command is running: `npm run tailwind:watch`
+2. The `styles.css` file imports Tailwind directives
+3. Your components are within the content paths defined in `tailwind.config.js`
+
+<Note>
+  For more detailed troubleshooting, check the [Angular CLI documentation](https://angular.dev/tools/cli) or the [Tailwind CSS documentation](https://tailwindcss.com/docs).
+</Note>

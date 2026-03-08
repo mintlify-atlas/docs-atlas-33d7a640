@@ -1,0 +1,217 @@
+---
+title: "Component Architecture"
+description: "Learn about the standalone component structure and organization"
+---
+
+## Overview
+
+The portfolio uses Angular's modern **standalone components** architecture, eliminating the need for NgModules. Each component is self-contained with its own TypeScript class, HTML template, CSS styles, and unit tests.
+
+## Standalone Components
+
+Starting with Angular 14+, standalone components allow you to build applications without NgModules. This portfolio leverages this modern approach for a simpler, more maintainable architecture.
+
+<CodeGroup>
+```typescript Example: Header Component (src/app/components/header/header.ts)
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-header',
+  imports: [ CommonModule ],
+  templateUrl: './header.html',
+  styleUrl: './header.css'
+})
+export class Header {
+  isMenuOpen = false;
+  
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  closeMenu(): void {
+    this.isMenuOpen = false;
+  }
+
+   downloadCV(): void {
+    const link = document.createElement('a');
+    link.href = 'CV/JhonnyDiazCenteno_CV_DesarolladorWeb.pdf';
+    link.download = 'JhonnyDiazCenteno_CV_DesarolladorWeb.pdf'; 
+    link.click();
+  }
+}
+```
+</CodeGroup>
+
+<Note>
+Notice the absence of `standalone: true` in the Header component. In Angular 19+, components are standalone by default. The `standalone: true` flag is only needed if explicitly declaring it for backward compatibility or clarity.
+</Note>
+
+## Component Structure
+
+Each component follows a consistent four-file structure:
+
+### 1. TypeScript Class (`.ts`)
+
+Contains the component logic, state, and methods.
+
+**Location pattern:** `src/app/components/[component-name]/[component-name].ts`
+
+**Example:**
+- `src/app/components/header/header.ts`
+- `src/app/components/hero/hero.ts`
+- `src/app/components/about/about.ts`
+
+### 2. HTML Template (`.html`)
+
+Defines the component's view structure.
+
+**Location pattern:** `src/app/components/[component-name]/[component-name].html`
+
+### 3. CSS Styles (`.css`)
+
+Component-scoped styles using Tailwind CSS utility classes.
+
+**Location pattern:** `src/app/components/[component-name]/[component-name].css`
+
+### 4. Unit Tests (`.spec.ts`)
+
+Jasmine/Karma test specifications.
+
+**Location pattern:** `src/app/components/[component-name]/[component-name].spec.ts`
+
+## Available Components
+
+The portfolio contains six main components:
+
+<CardGroup cols={2}>
+  <Card title="Header" icon="bars">
+    Navigation bar with menu toggle and CV download functionality
+    
+    **Location:** `src/app/components/header/`
+  </Card>
+  
+  <Card title="Hero" icon="star">
+    Landing section with introduction and call-to-action
+    
+    **Location:** `src/app/components/hero/`
+  </Card>
+  
+  <Card title="About" icon="user">
+    Personal information and skills overview
+    
+    **Location:** `src/app/components/about/`
+  </Card>
+  
+  <Card title="Projects" icon="folder">
+    Portfolio showcase with project cards and details
+    
+    **Location:** `src/app/components/projects/`
+  </Card>
+  
+  <Card title="Contact" icon="envelope">
+    Contact form and social media links
+    
+    **Location:** `src/app/components/contact/`
+  </Card>
+  
+  <Card title="Footer" icon="copyright">
+    Footer with links and copyright information
+    
+    **Location:** `src/app/components/footer/`
+  </Card>
+</CardGroup>
+
+## Root Application Component
+
+The `App` component serves as the root component that composes all other components together.
+
+<CodeGroup>
+```typescript src/app/app.ts
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { Header } from './components/header/header';
+import { Hero } from './components/hero/hero';
+import { About } from './components/about/about';
+import { Projects } from './components/projects/projects';
+import { Contact } from './components/contact/contact';
+import { Footer } from './components/footer/footer';
+
+
+@Component({
+  selector: 'app-root',
+  standalone: true, 
+  imports: [RouterOutlet, Header, Hero, About, Projects, Contact, Footer],
+  templateUrl: './app.html',
+  styleUrl: './app.css'
+})
+export class App {
+  protected readonly title = signal('portafolio');
+ 
+  toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+  }
+}
+```
+</CodeGroup>
+
+**Key features:**
+
+1. **Explicit imports:** All components are imported directly in the `imports` array
+2. **Signal-based state:** Uses Angular signals for reactive state management (`title`)
+3. **Dark mode toggle:** Manipulates the `dark` class on the root element
+4. **Single template:** Renders all components in a single-page layout
+
+## Component Communication
+
+### Parent to Child
+
+Components can receive data through `@Input()` decorators (when needed).
+
+### Child to Parent
+
+Components can emit events through `@Output()` decorators with `EventEmitter` (when needed).
+
+### Shared State
+
+The application can use Angular signals for reactive state management across components.
+
+<Info>
+Since this is a single-page portfolio without complex state management needs, most components are self-contained without extensive parent-child communication.
+</Info>
+
+## Benefits of Standalone Components
+
+<AccordionGroup>
+  <Accordion title="Simpler Architecture">
+    No need to declare, import, or export components in NgModules. Each component is self-contained.
+  </Accordion>
+  
+  <Accordion title="Better Tree Shaking">
+    Unused components and dependencies are more easily eliminated during the build process.
+  </Accordion>
+  
+  <Accordion title="Improved Developer Experience">
+    Less boilerplate code and easier to understand component dependencies.
+  </Accordion>
+  
+  <Accordion title="Faster Compilation">
+    The Angular compiler can optimize standalone components more efficiently.
+  </Accordion>
+</AccordionGroup>
+
+## Testing Components
+
+Each component includes a `.spec.ts` file for unit testing:
+
+```bash
+# Run all tests
+ng test
+
+# Run tests for a specific component
+ng test --include='**/header.spec.ts'
+```
+
+<Warning>
+Make sure to update component tests when modifying component logic to maintain code quality and prevent regressions.
+</Warning>

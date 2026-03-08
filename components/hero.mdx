@@ -1,0 +1,147 @@
+---
+title: Hero Component
+description: Landing section featuring developer introduction and profile image
+---
+
+## Overview
+
+The Hero component serves as the landing section of the portfolio, introducing the developer with a headline, description, and profile image.
+
+## Purpose
+
+- Provide an engaging first impression
+- Display developer role and brief bio
+- Show professional profile image
+- Include call-to-action to view projects
+
+## Component Structure
+
+```typescript hero.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-hero',
+  imports: [],
+  templateUrl: './hero.html',
+  styleUrl: './hero.css'
+})
+export class Hero {
+
+}
+```
+
+<Note>
+The Hero component is presentational only - it contains no TypeScript logic beyond the component definition.
+</Note>
+
+## HTML Template
+
+### Section Layout
+
+```html
+<section class="w-full">
+  <div class="flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 py-10 items-center">
+    <!-- Text content -->
+    <div class="flex flex-col gap-6 text-center lg:text-left flex-1">
+      <!-- Content here -->
+    </div>
+    
+    <!-- Profile image -->
+    <div class="w-full max-w-md lg:max-w-none lg:w-1/2">
+      <!-- Image here -->
+    </div>
+  </div>
+</section>
+```
+
+### Text Content
+
+```html
+<div class="flex flex-col gap-6 text-center lg:text-left flex-1">
+  <div class="flex flex-col gap-3">
+    <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tighter text-gray-900 dark:text-white">
+      Desarrollador Web 
+    </h1>
+    <p class="text-base md:text-lg font-normal leading-normal text-gray-600 dark:text-gray-300">
+      Desarrollador web en formación con experiencia práctica en Angular y Spring Boot. 
+      Me interesa crear aplicaciones web ágiles, comprender el ciclo completo de desarrollo 
+      y mejorar cada día mis habilidades en frontend, backend y experiencia de usuario.
+    </p>
+  </div>
+  
+  <button class="flex self-center lg:self-start min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+    <span class="truncate">Ver Proyectos</span>
+  </button>
+</div>
+```
+
+### Profile Image
+
+```html
+<div class="w-full max-w-md lg:max-w-none lg:w-1/2">
+  <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+    <img 
+      src="/images/FotoCurriculum.jpg" 
+      alt="Jhonny Diaz Centeno - Desarrollador Web Full Stack" 
+      class="w-full h-full object-contain"
+      loading="eager"
+    />
+  </div>
+</div>
+```
+
+## Layout Behavior
+
+### Mobile Layout
+
+- Stacked layout with image first, then text
+- Center-aligned text
+- CTA button centered
+
+### Desktop Layout (lg+)
+
+- Side-by-side layout (50/50 split)
+- Text left-aligned
+- CTA button left-aligned
+- Image on the right side
+
+<Tip>
+The `flex-col-reverse` class on mobile ensures the profile image appears above the text on small screens for better visual hierarchy.
+</Tip>
+
+## Content Structure
+
+### Headline
+"Desarrollador Web" - Simple, direct job title
+
+### Description
+Highlights:
+- Technologies: Angular and Spring Boot
+- Focus areas: Full-stack development, UX
+- Learning mindset and continuous improvement
+
+### Call-to-Action
+"Ver Proyectos" button encourages visitors to explore the portfolio
+
+## Responsive Typography
+
+- Headline: `text-4xl md:text-5xl` (scales from 36px to 48px)
+- Description: `text-base md:text-lg` (scales from 16px to 18px)
+- Tight tracking on headline for modern look: `tracking-tighter`
+
+## Image Optimization
+
+- `loading="eager"` - Prioritizes hero image loading
+- `aspect-square` - Maintains 1:1 ratio
+- `object-contain` - Ensures full image is visible without cropping
+- Rounded corners with `rounded-xl`
+
+<Note>
+The profile image should be placed in the `public/images/` directory with the filename `FotoCurriculum.jpg`.
+</Note>
+
+## Dark Mode Support
+
+- Text colors: `dark:text-white`, `dark:text-gray-300`
+- Background: `dark:bg-gray-800` for image container
+- Primary button adapts to theme automatically

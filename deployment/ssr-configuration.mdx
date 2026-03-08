@@ -1,0 +1,342 @@
+---
+title: 'SSR Configuration'
+description: 'Configure and deploy Angular Universal server-side rendering'
+---
+
+## Introduction
+
+The portfolio application is configured with Angular Universal for server-side rendering (SSR). This provides significant benefits for SEO, initial page load performance, and social media sharing.
+
+## Benefits of SSR for Portfolio
+
+<CardGroup cols={2}>
+  <Card title="SEO Optimization" icon="search">
+    Search engines can crawl fully-rendered HTML content
+  </Card>
+  
+  <Card title="Fast First Paint" icon="bolt">
+    Users see content immediately without waiting for JavaScript
+  </Card>
+  
+  <Card title="Social Media" icon="share-nodes">
+    Rich previews work correctly on LinkedIn, Twitter, etc.
+  </Card>
+  
+  <Card title="Performance" icon="gauge-high">
+    Improved Core Web Vitals and Lighthouse scores
+  </Card>
+</CardGroup>
+
+## Angular Universal Configuration
+
+The SSR setup is configured in `angular.json`:
+
+```json
+{
+  "projects": {
+    "portafolio": {
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Key Configuration Options
+
+- **`outputMode: "server"`**: Enables full SSR mode (vs static prerendering)
+- **`server: "src/main.server.ts"`**: Entry point for Angular server bootstrap
+- **`ssr.entry: "src/server.ts"`**: Express server configuration file
+
+## Server Entry Point
+
+The main server file is located at `src/server.ts` and uses Express with Angular SSR:
+
+```typescript
+import {
+  AngularNodeAppEngine,
+  createNodeRequestHandler,
+  isMainModule,
+  writeResponseToNodeResponse,
+} from '@angular/ssr/node';
+import express from 'express';
+import { join } from 'node:path';
+
+const browserDistFolder = join(import.meta.dirname, '../browser');
+
+const app = express();
+const angularApp = new AngularNodeAppEngine();
+```
+
+<Info>
+  The `AngularNodeAppEngine` is the core of Angular SSR. It handles rendering Angular components on the server and returning HTML to the client.
+</Info>
+
+### Static File Serving
+
+The server serves static assets with aggressive caching:
+
+```typescript
+app.use(
+  express.static(browserDistFolder, {
+    maxAge: '1y',
+    index: false,
+    redirect: false,
+  }),
+);
+```
+
+<Note>
+  Static files are cached for 1 year. Output hashing ensures that file names change when content changes, automatically invalidating old caches.
+</Note>
+
+### Request Handling
+
+All non-static requests are handled by Angular:
+
+```typescript
+app.use((req, res, next) => {
+  angularApp
+    .handle(req)
+    .then((response) =>
+      response ? writeResponseToNodeResponse(response, res) : next(),
+    )
+    .catch(next);
+});
+```
+
+## Server Bootstrap Configuration
+
+The Angular server application is configured in `src/app/app.config.server.ts`:
+
+```typescript
+import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
+import { provideServerRendering, withRoutes } from '@angular/ssr';
+import { appConfig } from './app.config';
+import { serverRoutes } from './app.routes.server';
+
+const serverConfig: ApplicationConfig = {
+  providers: [
+    provideServerRendering(withRoutes(serverRoutes))
+  ]
+};
+
+export const config = mergeApplicationConfig(appConfig, serverConfig);
+```
+
+This configuration:
+
+- Merges client-side and server-side application configs
+- Provides server rendering capability with route support
+- Uses separate server routes for SSR-specific behavior
+
+<Warning>
+  The `serverRoutes` may define different behavior for certain routes during SSR. Always test server-rendered output matches expected client behavior.
+</Warning>
+
+## Building for SSR
+
+<Steps>
+  <Step title="Install Dependencies">
+    Ensure all SSR dependencies are installed:
+    
+    ```bash
+    npm install
+    ```
+    
+    Key dependencies:
+    - `@angular/ssr` - Angular SSR toolkit
+    - `@angular/platform-server` - Server platform
+    - `express` - Web server framework
+  </Step>
+  
+  <Step title="Build the Application">
+    Build both client and server bundles:
+    
+    ```bash
+    npm run build
+    ```
+    
+    This creates:
+    - `dist/portafolio/browser/` - Client-side files
+    - `dist/portafolio/server/server.mjs` - Server bundle
+  </Step>
+  
+  <Step title="Test Locally">
+    Start the SSR server:
+    
+    ```bash
+    npm run serve:ssr:portafolio
+    ```
+    
+    Visit `http://localhost:4000` and verify:
+    - Page renders correctly
+    - View source shows full HTML content (not just loading state)
+    - Navigation works smoothly
+  </Step>
+</Steps>
+
+## Running the SSR Server
+
+The SSR server can be started with:
+
+```bash
+npm run serve:ssr:portafolio
+```
+
+This executes:
+
+```bash
+node dist/portafolio/server/server.mjs
+```
+
+### Server Configuration
+
+The server listens on:
+
+- **Port**: Environment variable `PORT` or default `4000`
+- **Host**: All interfaces (`0.0.0.0` in production)
+
+Set the port via environment variable:
+
+```bash
+PORT=8080 npm run serve:ssr:portafolio
+```
+
+<Info>
+  The server automatically detects if it's the main module or running via PM2, making it compatible with process managers.
+</Info>
+
+## Production Deployment
+
+### Option 1: Direct Node.js
+
+1. Build the application:
+   ```bash
+   npm run build
+   ```
+
+2. Copy `dist/portafolio/` to your server
+
+3. Install production dependencies:
+   ```bash
+   npm install --production
+   ```
+
+4. Start the server:
+   ```bash
+   NODE_ENV=production PORT=4000 node dist/portafolio/server/server.mjs
+   ```
+
+### Option 2: PM2 Process Manager
+
+1. Install PM2:
+   ```bash
+   npm install -g pm2
+   ```
+
+2. Start with PM2:
+   ```bash
+   pm2 start dist/portafolio/server/server.mjs --name portfolio
+   ```
+
+3. Configure auto-restart:
+   ```bash
+   pm2 startup
+   pm2 save
+   ```
+
+<Note>
+  The server code includes PM2 detection (`process.env['pm_id']`) and will start correctly when managed by PM2.
+</Note>
+
+### Option 3: Docker
+
+Create a `Dockerfile`:
+
+```dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --production
+
+COPY dist/portafolio ./dist/portafolio
+
+EXPOSE 4000
+ENV PORT=4000
+ENV NODE_ENV=production
+
+CMD ["node", "dist/portafolio/server/server.mjs"]
+```
+
+Build and run:
+
+```bash
+docker build -t portfolio-ssr .
+docker run -p 4000:4000 portfolio-ssr
+```
+
+## Adding API Endpoints
+
+You can add custom API endpoints to the Express server. Edit `src/server.ts`:
+
+```typescript
+// Add before the static file serving
+app.get('/api/contact', (req, res) => {
+  res.json({ email: 'contact@example.com' });
+});
+
+app.post('/api/contact', express.json(), (req, res) => {
+  // Handle contact form submission
+  res.json({ success: true });
+});
+```
+
+<Warning>
+  API endpoints must be defined **before** the static file middleware and Angular request handler to ensure they are processed correctly.
+</Warning>
+
+## Troubleshooting
+
+### Server Won't Start
+
+- Check that port 4000 is not already in use
+- Verify `dist/portafolio/server/server.mjs` exists
+- Ensure Node.js 20+ is installed
+
+### Blank Page on Load
+
+- Check browser console for errors
+- Verify static files are served correctly (`/browser` directory)
+- Test with `curl http://localhost:4000` to see server response
+
+### Hydration Errors
+
+- Ensure server and client render the same content
+- Check for browser-only APIs used during SSR
+- Review `app.routes.server.ts` for route conflicts
+
+<Info>
+  Use Chrome DevTools to view the full HTML source (not the rendered DOM) to verify SSR is working. The source should show complete page content before JavaScript executes.
+</Info>
+
+## Next Steps
+
+- Configure reverse proxy (nginx) for production
+- Set up SSL/TLS certificates
+- Implement monitoring and logging
+- Configure CDN for static assets
+- Set up CI/CD pipeline for automated deployments

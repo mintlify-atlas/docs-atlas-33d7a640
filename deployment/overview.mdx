@@ -1,0 +1,154 @@
+---
+title: 'Deployment Overview'
+description: 'Learn how to deploy the Jhonny Diaz Portfolio to production'
+---
+
+## Introduction
+
+The portfolio application is built with Angular 20 and supports both static and server-side rendering (SSR) deployment options. This guide covers the deployment process and available hosting options.
+
+## Prerequisites
+
+Before deploying, ensure you have:
+
+- Node.js 20+ installed
+- All dependencies installed (`npm install`)
+- Production environment variables configured
+- Build process tested locally
+
+## Build for Production
+
+To build the application for production:
+
+```bash
+npm run build
+```
+
+This command runs `ng build` with the production configuration, which:
+
+- Enables optimization and minification
+- Applies output hashing for cache busting
+- Generates both browser and server bundles (for SSR)
+- Enforces bundle size budgets (500kB initial warning, 1MB error)
+
+<Note>
+  The default build configuration is set to `production` in `angular.json`.
+</Note>
+
+## Output Structure
+
+After building, the output is generated in the `dist/portafolio/` directory:
+
+```
+dist/portafolio/
+├── browser/          # Client-side static files
+│   ├── index.html
+│   ├── main-[hash].js
+│   └── styles-[hash].css
+└── server/           # Server-side rendering files
+    └── server.mjs    # Express server entry point
+```
+
+## Deployment Options
+
+<CardGroup cols={2}>
+  <Card title="Static Hosting" icon="globe" href="#static-hosting">
+    Deploy to Vercel, Netlify, or GitHub Pages for simple static sites
+  </Card>
+  
+  <Card title="SSR Deployment" icon="server" href="/deployment/ssr-configuration">
+    Full server-side rendering for optimal SEO and performance
+  </Card>
+  
+  <Card title="Docker" icon="docker">
+    Containerize the application for cloud deployment
+  </Card>
+  
+  <Card title="Cloud Platforms" icon="cloud">
+    Deploy to AWS, Google Cloud, or Azure
+  </Card>
+</CardGroup>
+
+## Static Hosting
+
+For static hosting without SSR, you can deploy the `dist/portafolio/browser/` directory to:
+
+### Vercel
+
+1. Install Vercel CLI: `npm i -g vercel`
+2. Run `vercel` in the project root
+3. Follow the prompts to deploy
+
+### Netlify
+
+1. Connect your Git repository to Netlify
+2. Set build command: `npm run build`
+3. Set publish directory: `dist/portafolio/browser`
+4. Deploy
+
+### GitHub Pages
+
+1. Build the project: `npm run build`
+2. Copy contents of `dist/portafolio/browser/` to your GitHub Pages repository
+3. Push to deploy
+
+<Warning>
+  Static hosting does not support server-side rendering. For full SSR capabilities, see the [SSR Configuration](/deployment/ssr-configuration) guide.
+</Warning>
+
+## Server Deployment (SSR)
+
+For server-side rendering deployment, you need a Node.js server environment. See the [SSR Configuration](/deployment/ssr-configuration) guide for detailed setup instructions.
+
+### Quick Start
+
+After building:
+
+```bash
+npm run serve:ssr:portafolio
+```
+
+This starts the Express server on port 4000 (or the `PORT` environment variable).
+
+## Environment Considerations
+
+<Steps>
+  <Step title="Set Environment Variables">
+    Configure production environment variables before deployment:
+    
+    - `PORT`: Server port (default: 4000)
+    - `NODE_ENV`: Set to `production`
+    - API endpoints and keys as needed
+  </Step>
+  
+  <Step title="Bundle Size Monitoring">
+    The build enforces size budgets:
+    
+    - Initial bundle: 500kB warning, 1MB error
+    - Component styles: 4kB warning, 8kB error
+    
+    Monitor these during builds to maintain performance.
+  </Step>
+  
+  <Step title="Cache Strategy">
+    Static assets are served with a 1-year cache in SSR mode. Hashed filenames ensure proper cache invalidation.
+  </Step>
+</Steps>
+
+## Performance Optimization
+
+<Info>
+  The production build automatically applies several optimizations:
+  
+  - Code minification and tree-shaking
+  - Output hashing for cache busting
+  - License extraction
+  - Bundle size optimization
+</Info>
+
+## Next Steps
+
+- Learn about [SSR Configuration](/deployment/ssr-configuration) for server-side rendering setup
+- Configure your hosting provider
+- Set up CI/CD pipelines for automated deployment
+- Monitor application performance and errors

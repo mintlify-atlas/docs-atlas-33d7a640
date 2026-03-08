@@ -1,0 +1,218 @@
+---
+title: 'Tailwind CSS Setup'
+description: 'Complete Tailwind CSS configuration including custom theme, PostCSS setup, and plugins'
+---
+
+## Overview
+
+The portfolio uses **Tailwind CSS 4.1.14** for utility-first styling, providing a modern and maintainable approach to CSS. The configuration includes custom theme extensions, PostCSS integration, and additional plugins for enhanced functionality.
+
+## Dependencies
+
+The project uses the following Tailwind-related packages:
+
+```json package.json
+"dependencies": {
+  "@tailwindcss/postcss": "^4.1.14",
+  "@tailwindcss/vite": "^4.1.14",
+  "postcss": "^8.5.6"
+},
+"devDependencies": {
+  "tailwindcss": "^4.1.14"
+}
+```
+
+## Tailwind Configuration
+
+The Tailwind configuration is defined in `tailwind.config.js` at the root of the project:
+
+```js tailwind.config.js
+module.exports = {
+  content: [
+    "./src/**/*.{html,ts}",
+  ],
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#1173d4",
+        background: {
+          light: "#f6f7f8",
+          dark: "#101922",
+        },
+      },
+      fontFamily: {
+        display: ["Inter", "sans-serif"],
+      },
+    },
+  },
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/container-queries')],
+}
+```
+
+### Content Paths
+
+The `content` array defines where Tailwind should look for class names:
+
+- `./src/**/*.{html,ts}` - Scans all HTML templates and TypeScript files in the `src` directory
+
+This ensures Tailwind includes only the utility classes actually used in your components, keeping the final CSS bundle size minimal.
+
+## Custom Theme Extensions
+
+### Colors
+
+The portfolio extends Tailwind's default color palette with brand-specific colors:
+
+<CodeGroup>
+```css Primary Color
+/* Used for: buttons, links, accents, borders */
+.text-primary { color: #1173d4; }
+.bg-primary { background-color: #1173d4; }
+.border-primary { border-color: #1173d4; }
+```
+
+```css Background Colors
+/* Light mode background */
+.bg-background-light { background-color: #f6f7f8; }
+
+/* Dark mode background */
+.dark .bg-background-dark { background-color: #101922; }
+```
+</CodeGroup>
+
+<Note>
+The primary color `#1173d4` is a vibrant blue that provides excellent contrast in both light and dark modes while maintaining brand identity.
+</Note>
+
+### Typography
+
+The custom `display` font family uses **Inter**, a modern sans-serif typeface optimized for UI design:
+
+```html
+<h1 class="font-display text-4xl font-bold">
+  Jhonny Diaz Centeno
+</h1>
+```
+
+Inter provides excellent legibility at all sizes and includes comprehensive language support.
+
+## PostCSS Configuration
+
+The PostCSS setup is minimal and uses the official Tailwind CSS plugin:
+
+```json .postcssrc.json
+{
+  "plugins": {
+    "@tailwindcss/postcss": {}
+  }
+}
+```
+
+This configuration:
+- Processes Tailwind directives (`@tailwind`, `@apply`, `@layer`)
+- Handles Tailwind CSS imports
+- Integrates seamlessly with Angular's build pipeline
+- Automatically handles vendor prefixes
+
+## Tailwind Plugins
+
+The portfolio uses two official Tailwind CSS plugins:
+
+### @tailwindcss/forms
+
+Provides beautiful default styles for form elements:
+
+```html
+<!-- Automatically styled form inputs -->
+<input type="text" class="rounded-lg" />
+<textarea class="rounded-lg" />
+<select class="rounded-lg" />
+```
+
+**Features:**
+- Consistent styling across browsers
+- Accessible form controls
+- Easy to override with Tailwind utilities
+
+### @tailwindcss/container-queries
+
+Enables container queries for responsive design based on parent container size:
+
+```html
+<div class="@container">
+  <div class="@lg:grid-cols-2">
+    <!-- Responsive based on container, not viewport -->
+  </div>
+</div>
+```
+
+**Use cases:**
+- Component-level responsive design
+- Reusable components that adapt to their context
+- More flexible layouts than media queries alone
+
+## Build Integration
+
+Tailwind CSS is integrated into the Angular build process. You can also run Tailwind in watch mode during development:
+
+```bash
+npm run tailwind:watch
+```
+
+This command watches for changes and regenerates the CSS output:
+
+```json package.json
+"scripts": {
+  "tailwind:watch": "tailwindcss -i ./src/styles.css -o ./src/tailwind-output.css --watch"
+}
+```
+
+## Usage Examples
+
+### Primary Color
+
+```html
+<!-- Button with primary background -->
+<button class="bg-primary text-white hover:bg-primary/90">
+  Ver Proyectos
+</button>
+
+<!-- Link with primary text color -->
+<a class="text-primary hover:underline">Learn more</a>
+```
+
+### Background Colors
+
+```html
+<!-- Light mode background -->
+<div class="bg-background-light">
+  Content here
+</div>
+
+<!-- Dark mode background -->
+<div class="dark:bg-background-dark">
+  Content here
+</div>
+```
+
+### Display Font
+
+```html
+<!-- Using the Inter display font -->
+<h1 class="font-display text-5xl font-black">
+  Desarrollador Web
+</h1>
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Dark Mode" icon="moon" href="/styling/dark-mode">
+    Learn how dark mode is implemented using Tailwind's class strategy
+  </Card>
+  
+  <Card title="Responsive Design" icon="mobile" href="/styling/responsive-design">
+    Explore the mobile-first responsive design patterns
+  </Card>
+</CardGroup>

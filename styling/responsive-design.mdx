@@ -1,0 +1,488 @@
+---
+title: 'Responsive Design'
+description: 'Mobile-first responsive design with Tailwind CSS breakpoints and real component examples'
+---
+
+## Overview
+
+The portfolio follows a **mobile-first approach** to responsive design, using Tailwind CSS breakpoints to progressively enhance the layout for larger screens. This ensures optimal performance and user experience across all device sizes.
+
+## Mobile-First Methodology
+
+Mobile-first means:
+1. **Default styles target mobile devices** (smallest screens)
+2. **Breakpoint prefixes add styles for larger screens** (progressive enhancement)
+3. **Content is accessible on all devices** without horizontal scrolling
+
+```html
+<!-- Mobile: vertical stack, Large screens: horizontal layout -->
+<div class="flex flex-col lg:flex-row">
+  <!-- Content -->
+</div>
+```
+
+## Tailwind Breakpoints
+
+Tailwind CSS provides these default breakpoints:
+
+| Breakpoint | Min Width | CSS Media Query | Target Devices |
+|------------|-----------|-----------------|----------------|
+| `sm:` | 640px | `@media (min-width: 640px)` | Large phones, small tablets |
+| `md:` | 768px | `@media (min-width: 768px)` | Tablets |
+| `lg:` | 1024px | `@media (min-width: 1024px)` | Laptops, desktops |
+| `xl:` | 1280px | `@media (min-width: 1280px)` | Large desktops |
+| `2xl:` | 1536px | `@media (min-width: 1536px)` | Extra large screens |
+
+<Note>
+Breakpoints are **min-width** based, meaning `lg:` applies to screens **1024px and wider**.
+</Note>
+
+## Real Component Examples
+
+### Header Component
+
+The header demonstrates desktop vs mobile navigation patterns:
+
+```html header.html
+<header class="sticky top-0 z-50 bg-white/95 dark:bg-background-dark/95 backdrop-blur-sm border-b border-gray-200 dark:border-primary/30 shadow-sm">
+  <div class="flex items-center justify-between px-4 sm:px-6 lg:px-10 py-4">
+    <!-- Logo and name -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="size-6 sm:size-7 text-primary flex-shrink-0">
+        <!-- Logo SVG -->
+      </div>
+      <h2 class="text-base sm:text-lg font-bold leading-tight tracking-tight text-gray-900 dark:text-white truncate">
+        Jhonny Diaz Centeno
+      </h2>
+    </div>
+
+    <!-- Desktop Navigation: Hidden on mobile, visible on large screens -->
+    <nav class="hidden lg:flex items-center gap-6 xl:gap-8">
+      <button class="group relative flex items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4">
+        <svg class="w-4 h-4 transition-transform duration-300 group-hover:-translate-y-0.5"><!-- Icon --></svg>
+        <span class="hidden xl:inline">Descargar CV</span>
+        <span class="xl:hidden">CV</span>
+      </button>
+    </nav>
+
+    <!-- Mobile Menu Button: Visible on mobile, hidden on large screens -->
+    <button class="lg:hidden p-2 rounded-lg text-gray-700 dark:text-gray-300">
+      <!-- Hamburger icon -->
+    </button>
+  </div>
+
+  <!-- Mobile Menu: Hidden on large screens -->
+  <div class="lg:hidden overflow-hidden transition-all duration-300 ease-in-out">
+    <nav class="px-4 py-4 space-y-3 bg-gray-50 dark:bg-background-dark/50">
+      <!-- Mobile menu content -->
+    </nav>
+  </div>
+</header>
+```
+
+**Responsive patterns:**
+
+<AccordionGroup>
+  <Accordion title="Responsive Spacing">
+    ```html
+    <!-- Padding increases with screen size -->
+    <div class="px-4 sm:px-6 lg:px-10 py-4">
+    ```
+    
+    - Mobile: `px-4` (1rem / 16px horizontal padding)
+    - Small: `sm:px-6` (1.5rem / 24px)
+    - Large: `lg:px-10` (2.5rem / 40px)
+  </Accordion>
+
+  <Accordion title="Responsive Sizing">
+    ```html
+    <!-- Logo size adapts to screen -->
+    <div class="size-6 sm:size-7 text-primary">
+    ```
+    
+    - Mobile: `size-6` (24px square)
+    - Small: `sm:size-7` (28px square)
+  </Accordion>
+
+  <Accordion title="Responsive Typography">
+    ```html
+    <!-- Font size increases on larger screens -->
+    <h2 class="text-base sm:text-lg font-bold">
+    ```
+    
+    - Mobile: `text-base` (16px)
+    - Small: `sm:text-lg` (18px)
+  </Accordion>
+
+  <Accordion title="Show/Hide Elements">
+    ```html
+    <!-- Desktop nav: hidden mobile, visible large+ -->
+    <nav class="hidden lg:flex items-center">
+    
+    <!-- Mobile button: visible mobile, hidden large+ -->
+    <button class="lg:hidden p-2">
+    ```
+    
+    Pattern: `hidden lg:flex` means "hidden by default, flex on large screens"
+  </Accordion>
+
+  <Accordion title="Conditional Text Content">
+    ```html
+    <!-- Full text on XL, abbreviated on large -->
+    <span class="hidden xl:inline">Descargar CV</span>
+    <span class="xl:hidden">CV</span>
+    ```
+    
+    Shows longer text on extra-large screens, shorter version otherwise.
+  </Accordion>
+</AccordionGroup>
+
+### Hero Component
+
+The hero section shows layout transformation across breakpoints:
+
+```html hero.html
+<section class="w-full">
+  <!-- Mobile: column-reverse (image first), Large: row (text first) -->
+  <div class="flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 py-10 items-center">
+    <!-- Text Content -->
+    <div class="flex flex-col gap-6 text-center lg:text-left flex-1">
+      <div class="flex flex-col gap-3">
+        <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tighter text-gray-900 dark:text-white">
+          Desarrollador Web 
+        </h1>
+        <p class="text-base md:text-lg font-normal leading-normal text-gray-600 dark:text-gray-300">
+          Desarrollador web en formación con experiencia práctica en Angular y Spring Boot...
+        </p>
+      </div>
+      <button class="flex self-center lg:self-start min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+        <span class="truncate">Ver Proyectos</span>
+      </button>
+    </div>
+    
+    <!-- Profile Image -->
+    <div class="w-full max-w-md lg:max-w-none lg:w-1/2">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+        <img src="/images/FotoCurriculum.jpg" alt="Jhonny Diaz Centeno" class="w-full h-full object-contain" loading="eager" />
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+**Responsive patterns:**
+
+<CodeGroup>
+```html Layout Direction
+<!-- Mobile: vertical stack (image on top)
+     Large: horizontal row (text left, image right) -->
+<div class="flex flex-col-reverse lg:flex-row">
+```
+
+```html Gap Spacing
+<!-- Mobile: 2rem gap
+     Large: 3rem gap -->
+<div class="gap-8 lg:gap-12">
+```
+
+```html Text Alignment
+<!-- Mobile: centered text
+     Large: left-aligned text -->
+<div class="text-center lg:text-left">
+```
+
+```html Typography Scale
+<!-- Mobile: 36px heading
+     Medium: 48px heading -->
+<h1 class="text-4xl md:text-5xl font-black">
+```
+
+```html Button Alignment
+<!-- Mobile: centered button
+     Large: left-aligned button -->
+<button class="flex self-center lg:self-start">
+```
+
+```html Image Width
+<!-- Mobile: full width (max 28rem)
+     Large: 50% of container -->
+<div class="w-full max-w-md lg:max-w-none lg:w-1/2">
+```
+</CodeGroup>
+
+### Projects Component
+
+The projects grid demonstrates responsive column layouts:
+
+```html projects.html
+<section class="py-10">
+  <h2 class="text-2xl font-bold leading-tight tracking-tight px-4 pb-6 text-gray-900 dark:text-white">
+    Proyectos Destacados
+  </h2>
+  
+  <!-- Mobile: 1 column, Medium: 2 columns -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Project Card -->
+    <div class="flex flex-col rounded-xl overflow-hidden bg-white dark:bg-background-dark shadow-md border border-gray-200 dark:border-primary/20 hover:shadow-lg transition-shadow">
+      <div class="w-full bg-center bg-no-repeat aspect-video bg-cover" style="background-image: url('...')"></div>
+      <div class="flex flex-col gap-4 p-6 flex-grow">
+        <h3 class="text-lg font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-white">
+          Sistema de Gestión de Inventario
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300 text-sm font-normal leading-normal flex-grow">
+          Aplicación web para administrar el inventario de materia prima...
+        </p>
+        <p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal">
+          Tecnologías: Angular, Node.js, Docker, SonarCloud, AWS, PostgreSQL, Spring Boot
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3 mt-auto">
+          <a href="#" class="flex-1 flex items-center justify-center gap-2 px-4 h-10 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm dark:bg-blue-500 dark:hover:bg-blue-600">
+            <span>Ver Proyecto</span>
+          </a>
+          <a href="#" class="flex-1 flex items-center justify-center gap-2 px-4 h-10 bg-gray-900 dark:bg-gray-800 text-white rounded-lg text-sm font-semibold hover:bg-gray-800 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm">
+            <span>GitHub</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+**Responsive patterns:**
+
+<Tabs>
+  <Tab title="Grid Layout">
+    ```html
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    ```
+    
+    **Mobile (< 768px):**
+    - `grid-cols-1` - Single column layout
+    - Cards stack vertically
+    - Full width utilization
+    
+    **Medium+ (≥ 768px):**
+    - `md:grid-cols-2` - Two column layout
+    - Cards appear side by side
+    - Better use of horizontal space
+  </Tab>
+  
+  <Tab title="Card Structure">
+    ```html
+    <div class="flex flex-col">
+    ```
+    
+    Cards always use vertical flex layout:
+    - Image at top
+    - Content in middle
+    - Buttons at bottom (`mt-auto`)
+    
+    This maintains consistent card anatomy across all screen sizes.
+  </Tab>
+  
+  <Tab title="Button Layout">
+    ```html
+    <div class="flex gap-3 mt-auto">
+      <a class="flex-1">Ver Proyecto</a>
+      <a class="flex-1">GitHub</a>
+    </div>
+    ```
+    
+    Buttons are:
+    - Equal width (`flex-1`)
+    - Side by side on all screens
+    - Pushed to bottom with `mt-auto`
+  </Tab>
+</Tabs>
+
+## Common Responsive Patterns
+
+### Layout Patterns
+
+<CodeGroup>
+```html Stack to Row
+<!-- Mobile: vertical stack
+     Large: horizontal row -->
+<div class="flex flex-col lg:flex-row">
+  <div>Left content</div>
+  <div>Right content</div>
+</div>
+```
+
+```html Grid Columns
+<!-- Mobile: 1 column
+     Medium: 2 columns
+     Large: 3 columns -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- Items -->
+</div>
+```
+
+```html Responsive Widths
+<!-- Mobile: full width
+     Large: 50% width -->
+<div class="w-full lg:w-1/2">
+  Content
+</div>
+```
+</CodeGroup>
+
+### Typography Patterns
+
+<CodeGroup>
+```html Heading Scale
+<!-- Mobile: 24px (1.5rem)
+     Medium: 30px (1.875rem)
+     Large: 36px (2.25rem) -->
+<h2 class="text-2xl md:text-3xl lg:text-4xl font-bold">
+```
+
+```html Body Text Scale
+<!-- Mobile: 14px
+     Medium: 16px -->
+<p class="text-sm md:text-base">
+```
+
+```html Text Alignment
+<!-- Mobile: centered
+     Large: left-aligned -->
+<div class="text-center lg:text-left">
+```
+</CodeGroup>
+
+### Spacing Patterns
+
+<CodeGroup>
+```html Padding
+<!-- Mobile: 1rem
+     Small: 1.5rem
+     Large: 2.5rem -->
+<div class="px-4 sm:px-6 lg:px-10">
+```
+
+```html Gap
+<!-- Mobile: 1.5rem
+     Medium: 2rem
+     Large: 3rem -->
+<div class="gap-6 md:gap-8 lg:gap-12">
+```
+
+```html Margin
+<!-- Mobile: 2rem vertical
+     Large: 4rem vertical -->
+<section class="my-8 lg:my-16">
+```
+</CodeGroup>
+
+### Visibility Patterns
+
+<CodeGroup>
+```html Hide on Mobile
+<!-- Only visible on large screens -->
+<div class="hidden lg:block">
+  Desktop content
+</div>
+```
+
+```html Hide on Desktop
+<!-- Only visible on mobile -->
+<div class="lg:hidden">
+  Mobile content
+</div>
+```
+
+```html Progressive Display
+<!-- Hidden mobile, flex on large -->
+<nav class="hidden lg:flex">
+  Navigation items
+</nav>
+```
+</CodeGroup>
+
+## Responsive Design Checklist
+
+<Steps>
+  <Step title="Start Mobile-First">
+    Define base styles without breakpoints for mobile devices:
+    
+    ```html
+    <div class="p-4 text-sm">
+      <!-- Mobile-first base styles -->
+    </div>
+    ```
+  </Step>
+  
+  <Step title="Add Breakpoints Progressively">
+    Layer on styles for larger screens:
+    
+    ```html
+    <div class="p-4 sm:p-6 md:p-8 text-sm md:text-base">
+      <!-- Enhanced for larger screens -->
+    </div>
+    ```
+  </Step>
+  
+  <Step title="Test All Breakpoints">
+    Verify layout at each breakpoint:
+    - 375px (mobile)
+    - 640px (sm)
+    - 768px (md)
+    - 1024px (lg)
+    - 1280px (xl)
+  </Step>
+  
+  <Step title="Consider Touch Targets">
+    Ensure interactive elements are at least 44x44px on mobile:
+    
+    ```html
+    <button class="h-12 px-6 lg:h-10 lg:px-4">
+      <!-- Larger on mobile for touch -->
+    </button>
+    ```
+  </Step>
+  
+  <Step title="Optimize Typography">
+    Use appropriate font sizes and line heights:
+    
+    ```html
+    <p class="text-base md:text-lg leading-relaxed">
+      Readable text at all sizes
+    </p>
+    ```
+  </Step>
+</Steps>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Use Container Queries" icon="square-dashed">
+    For component-level responsive design, consider using `@container` queries with the `@tailwindcss/container-queries` plugin.
+  </Card>
+  
+  <Card title="Avoid Excessive Breakpoints" icon="ban">
+    Stick to 2-3 breakpoints per element. Too many breakpoints make code hard to maintain.
+  </Card>
+  
+  <Card title="Test Real Devices" icon="mobile">
+    Emulators are useful, but always test on real phones and tablets when possible.
+  </Card>
+  
+  <Card title="Consider Content" icon="align-left">
+    Let content guide breakpoints, not arbitrary device sizes. Break when the design breaks.
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Tailwind Setup" icon="paintbrush" href="/styling/tailwind-setup">
+    Learn about the complete Tailwind configuration
+  </Card>
+  
+  <Card title="Dark Mode" icon="moon" href="/styling/dark-mode">
+    Explore dark mode implementation patterns
+  </Card>
+</CardGroup>

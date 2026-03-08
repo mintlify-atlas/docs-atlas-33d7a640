@@ -1,0 +1,212 @@
+---
+title: Contact Component
+description: Technology skills showcase with icon badges (despite the component name)
+---
+
+## Overview
+
+Despite being named "Contact", this component actually displays the developer's technology skills as a collection of icon badges. It showcases proficiency in various programming languages, frameworks, databases, and tools.
+
+## Purpose
+
+- Display technical skill set visually
+- Show proficiency in multiple technologies
+- Use recognizable technology logos/icons
+- Provide quick overview of capabilities
+
+## Component Structure
+
+```typescript contact.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-contact',
+  imports: [],
+  templateUrl: './contact.html',
+  styleUrl: './contact.css'
+})
+export class Contact {
+
+}
+```
+
+<Note>
+This is a presentational component with no TypeScript logic. The component name "Contact" is misleading - it actually displays skills.
+</Note>
+
+## Technologies Displayed
+
+The component showcases 13 technologies across different categories:
+
+### Frontend
+- Angular
+- JavaScript
+- TypeScript
+- Tailwind CSS
+
+### Backend
+- Spring Boot
+- Node.js
+- Java
+- Python
+
+### Databases
+- PostgreSQL
+- MySQL
+
+### DevOps & Tools
+- Docker
+- Git
+- AWS
+
+## Skill Badge Structure
+
+```html
+<section class="py-10">
+  <h2 class="text-2xl font-bold leading-tight tracking-tight px-4 pb-6 text-gray-900 dark:text-white">
+    Habilidades
+  </h2>
+  
+  <div class="flex flex-wrap gap-4 px-4">
+    <!-- Skill badges -->
+  </div>
+</section>
+```
+
+## Individual Skill Badge
+
+```html
+<!-- Angular Badge Example -->
+<div class="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:text-primary-200">
+  <img
+    class="h-6 w-6"
+    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg"
+    alt="Angular"
+  />
+  <span>Angular</span>
+</div>
+```
+
+### Badge Components
+
+1. **Container**: Rounded pill shape with border and background
+2. **Icon**: 24px technology logo from DevIcon CDN
+3. **Label**: Technology name as text
+
+## Layout System
+
+```html
+<div class="flex flex-wrap gap-4 px-4">
+  <!-- Badges automatically wrap to new lines -->
+</div>
+```
+
+- `flex-wrap` - Allows badges to wrap to multiple rows
+- `gap-4` - Consistent 16px spacing between badges
+- Responsive behavior: Wraps naturally based on viewport width
+
+<Tip>
+The flex-wrap layout automatically adjusts badge arrangement based on screen size without media queries.
+</Tip>
+
+## Badge Styling
+
+### Visual Design
+
+- **Shape**: `rounded-full` - Pill-shaped badges
+- **Border**: `border-primary/30` - 30% opacity primary color
+- **Background**: `bg-primary/10` - 10% opacity primary color
+- **Padding**: `px-4 py-2` - Comfortable spacing around content
+- **Text**: `text-sm font-medium` - Small, medium-weight text
+
+### Color System
+
+- Light mode: `text-primary`
+- Dark mode: `dark:text-primary-200`
+- Consistent theme-aware coloring
+
+## Icon Source
+
+All icons are loaded from the DevIcon CDN:
+
+```html
+https://cdn.jsdelivr.net/gh/devicons/devicon/icons/{tech}/{tech}-original.svg
+```
+
+Examples:
+- Angular: `icons/angularjs/angularjs-original.svg`
+- Spring Boot: `icons/spring/spring-original.svg`
+- JavaScript: `icons/javascript/javascript-original.svg`
+- TypeScript: `icons/typescript/typescript-original.svg`
+- Docker: `icons/docker/docker-original.svg`
+
+<Note>
+Some icons use variations like `-plain-wordmark` instead of `-original` (e.g., AWS uses `amazonwebservices-plain-wordmark.svg`).
+</Note>
+
+## Complete Badge List
+
+```html
+<div class="flex flex-wrap gap-4 px-4">
+  <!-- Angular -->
+  <div class="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:text-primary-200">
+    <img class="h-6 w-6" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" alt="Angular" />
+    <span>Angular</span>
+  </div>
+  
+  <!-- Spring Boot -->
+  <div class="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:text-primary-200">
+    <img class="h-6 w-6" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" alt="Spring Boot" />
+    <span>Spring Boot</span>
+  </div>
+  
+  <!-- JavaScript -->
+  <div class="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:text-primary-200">
+    <img class="h-6 w-6" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" />
+    <span>JavaScript</span>
+  </div>
+  
+  <!-- TypeScript -->
+  <div class="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:text-primary-200">
+    <img class="h-6 w-6" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" />
+    <span>TypeScript</span>
+  </div>
+  
+  <!-- Additional badges... -->
+</div>
+```
+
+## Accessibility
+
+- Descriptive `alt` attributes on all images
+- Semantic heading structure
+- Clear technology names as text labels
+- Theme-aware color contrast
+
+## Performance
+
+- Icons loaded from CDN (cached across sites)
+- Small SVG file sizes
+- No lazy loading needed (all visible above fold)
+
+## Customization
+
+To add a new skill badge:
+
+1. Find the technology icon at https://devicon.dev/
+2. Copy the CDN URL
+3. Add a new badge div with the icon and label
+
+```html
+<div class="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary dark:text-primary-200">
+  <img class="h-6 w-6" src="CDN_URL_HERE" alt="Tech Name" />
+  <span>Tech Name</span>
+</div>
+```
+
+<Tip>
+Consider refactoring this component:
+1. Rename to `SkillsComponent` for clarity
+2. Move skills to a TypeScript array
+3. Use `*ngFor` to render badges dynamically
+</Tip>

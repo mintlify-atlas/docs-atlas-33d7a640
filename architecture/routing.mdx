@@ -1,0 +1,262 @@
+---
+title: "Routing Configuration"
+description: "Understand the client and server-side routing setup"
+---
+
+## Overview
+
+The Jhonny Diaz Portfolio is designed as a **single-page application** with no client-side routing. All sections (Header, Hero, About, Projects, Contact, Footer) are rendered on a single page without navigation between different routes.
+
+However, the application includes routing configuration files for future extensibility and server-side rendering (SSR) support.
+
+## Client-Side Routing
+
+### Routes Configuration
+
+The client-side routes are defined in `app.routes.ts`:
+
+<CodeGroup>
+```typescript src/app/app.routes.ts
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [];
+```
+</CodeGroup>
+
+**Current state:**
+- The `routes` array is **empty** (`[]`)
+- No route navigation is configured
+- The application renders a single page layout
+
+### Application Configuration
+
+Routing is registered in the application configuration:
+
+<CodeGroup>
+```typescript src/app/app.config.ts
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
+
+import { routes } from './app.routes';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideZonelessChangeDetection(),
+    provideRouter(routes), 
+    provideClientHydration(withEventReplay())
+  ]
+};
+```
+</CodeGroup>
+
+**Key providers:**
+
+1. **`provideBrowserGlobalErrorListeners()`** - Global error handling
+2. **`provideZonelessChangeDetection()`** - Modern zoneless change detection for better performance
+3. **`provideRouter(routes)`** - Router configuration (currently empty routes)
+4. **`provideClientHydration(withEventReplay())`** - SSR hydration with event replay
+
+<Info>
+**Zoneless Change Detection** is a modern Angular feature that improves performance by eliminating Zone.js dependency. The application uses signals and explicit change detection instead.
+</Info>
+
+## Server-Side Routing
+
+### Server Routes Configuration
+
+The server-side routes are defined in `app.routes.server.ts`:
+
+<CodeGroup>
+```typescript src/app/app.routes.server.ts
+import { RenderMode, ServerRoute } from '@angular/ssr';
+
+export const serverRoutes: ServerRoute[] = [
+  {
+    path: '**',
+    renderMode: RenderMode.Prerender
+  }
+];
+```
+</CodeGroup>
+
+**Configuration details:**
+
+- **`path: '**'`** - Matches all routes (wildcard)
+- **`RenderMode.Prerender`** - Prerenders the HTML at build time
+
+### Render Modes
+
+Angular SSR supports three render modes:
+
+<CardGroup cols={3}>
+  <Card title="Prerender" icon="file-code">
+    Generates static HTML at **build time**
+    
+    Best for: Static content, SEO
+  </Card>
+  
+  <Card title="Server" icon="server">
+    Renders HTML on the **server per request**
+    
+    Best for: Dynamic content
+  </Card>
+  
+  <Card title="Client" icon="browser">
+    Renders in the **browser only**
+    
+    Best for: Client-side apps
+  </Card>
+</CardGroup>
+
+<Note>
+This portfolio uses **Prerender mode** because the content is static and doesn't require server-side rendering per request. This provides the best performance and SEO benefits.
+</Note>
+
+## Single-Page Architecture
+
+### Why No Routing?
+
+The portfolio is intentionally designed as a single-page application:
+
+<AccordionGroup>
+  <Accordion title="Better User Experience">
+    Users can scroll through all sections smoothly without page reloads or navigation clicks.
+  </Accordion>
+  
+  <Accordion title="Simpler Navigation">
+    Navigation is handled through anchor links and smooth scrolling to sections.
+  </Accordion>
+  
+  <Accordion title="Faster Load Times">
+    All content loads once, eliminating the need for subsequent route-based loads.
+  </Accordion>
+  
+  <Accordion title="Portfolio-Appropriate">
+    Most portfolio websites benefit from a single-page layout showcasing all information at once.
+  </Accordion>
+</AccordionGroup>
+
+### Section-Based Navigation
+
+Instead of route-based navigation, the portfolio uses section IDs for smooth scrolling:
+
+```html
+<!-- Example: Header navigation links -->
+<a href="#hero">Home</a>
+<a href="#about">About</a>
+<a href="#projects">Projects</a>
+<a href="#contact">Contact</a>
+```
+
+## Future Extensibility
+
+While the current implementation has no routes, the routing infrastructure is in place for future expansion.
+
+### Adding Routes
+
+To add client-side routing in the future:
+
+<Steps>
+  <Step title="Define routes in app.routes.ts">
+    ```typescript
+    export const routes: Routes = [
+      { path: '', component: HomeComponent },
+      { path: 'blog', component: BlogComponent },
+      { path: 'blog/:id', component: BlogPostComponent }
+    ];
+    ```
+  </Step>
+  
+  <Step title="Add RouterOutlet to template">
+    The `RouterOutlet` is already imported in `app.ts`:
+    ```typescript
+    imports: [RouterOutlet, Header, Hero, About, Projects, Contact, Footer]
+    ```
+    
+    Add it to `app.html`:
+    ```html
+    <router-outlet />
+    ```
+  </Step>
+  
+  <Step title="Update server routes">
+    Configure server-side rendering for each route:
+    ```typescript
+    export const serverRoutes: ServerRoute[] = [
+      { path: '', renderMode: RenderMode.Prerender },
+      { path: 'blog', renderMode: RenderMode.Prerender },
+      { path: 'blog/:id', renderMode: RenderMode.Server }
+    ];
+    ```
+  </Step>
+</Steps>
+
+## SSR and Hydration
+
+The application is configured for server-side rendering:
+
+### Build Configuration
+
+In `angular.json`:
+
+```json
+"build": {
+  "builder": "@angular/build:application",
+  "options": {
+    "browser": "src/main.ts",
+    "server": "src/main.server.ts",
+    "outputMode": "server",
+    "ssr": {
+      "entry": "src/server.ts"
+    }
+  }
+}
+```
+
+### Hydration with Event Replay
+
+The application uses `withEventReplay()` for hydration:
+
+```typescript
+provideClientHydration(withEventReplay())
+```
+
+**Benefits:**
+- Captures user events during hydration
+- Replays events after the app becomes interactive
+- Prevents event loss during the SSR-to-client transition
+
+<Warning>
+When adding new routes or components, ensure they are compatible with SSR. Avoid using browser-specific APIs like `window` or `document` without proper checks.
+</Warning>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Lazy Loading (Future)">
+    When adding routes, use lazy loading for better performance:
+    ```typescript
+    {
+      path: 'blog',
+      loadComponent: () => import('./blog/blog.component').then(m => m.BlogComponent)
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Route Guards">
+    Protect routes with guards for authentication or authorization:
+    ```typescript
+    {
+      path: 'admin',
+      canActivate: [AuthGuard],
+      loadComponent: () => import('./admin/admin.component')
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Prerendering Strategy">
+    Use `RenderMode.Prerender` for static pages and `RenderMode.Server` for dynamic content.
+  </Accordion>
+</AccordionGroup>

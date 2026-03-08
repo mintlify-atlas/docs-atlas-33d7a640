@@ -1,0 +1,343 @@
+---
+title: 'Dark Mode Implementation'
+description: 'Class-based dark mode with manual toggle functionality'
+---
+
+## Overview
+
+The portfolio implements dark mode using Tailwind CSS's **class-based strategy**. This approach gives complete control over when dark mode is active, allowing users to toggle it manually via JavaScript.
+
+## Configuration
+
+Dark mode is configured in `tailwind.config.js`:
+
+```js tailwind.config.js
+module.exports = {
+  darkMode: "class",
+  // ... rest of config
+}
+```
+
+With `darkMode: "class"`, Tailwind's dark mode variants are activated when the `dark` class is present on the `html` element (or any parent element).
+
+## Toggle Implementation
+
+The dark mode toggle is implemented in the main `App` component:
+
+```ts src/app/app.ts
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { Header } from './components/header/header';
+import { Hero } from './components/hero/hero';
+import { About } from './components/about/about';
+import { Projects } from './components/projects/projects';
+import { Contact } from './components/contact/contact';
+import { Footer } from './components/footer/footer';
+
+@Component({
+  selector: 'app-root',
+  standalone: true, 
+  imports: [RouterOutlet, Header, Hero, About, Projects, Contact, Footer],
+  templateUrl: './app.html',
+  styleUrl: './app.css'
+})
+export class App {
+  protected readonly title = signal('portafolio');
+  
+  toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+  }
+}
+```
+
+### How It Works
+
+1. **Manual Toggle**: The `toggleDarkMode()` method toggles the `dark` class on the `<html>` element
+2. **CSS Cascade**: When the `dark` class is present, all `dark:` prefixed utilities become active
+3. **Component-Scoped**: Any component can access this method through the parent App component
+
+<Note>
+Unlike media query-based dark mode (`darkMode: 'media'`), the class strategy gives you full control over when dark mode activates, independent of the user's system preferences.
+</Note>
+
+## Using Dark Mode Classes
+
+Tailwind provides the `dark:` variant for all utility classes. When the `dark` class is present on a parent element, these variants take effect.
+
+### Basic Syntax
+
+```html
+<!-- Light mode: white background, dark text -->
+<!-- Dark mode: dark background, white text -->
+<div class="bg-white dark:bg-background-dark text-gray-900 dark:text-white">
+  Content
+</div>
+```
+
+## Real Component Examples
+
+### Header Component
+
+The header demonstrates multiple dark mode patterns:
+
+```html header.html
+<header class="sticky top-0 z-50 bg-white/95 dark:bg-background-dark/95 backdrop-blur-sm border-b border-gray-200 dark:border-primary/30 shadow-sm">
+  <div class="flex items-center justify-between px-4 sm:px-6 lg:px-10 py-4">
+    <!-- Logo and title -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="size-6 sm:size-7 text-primary flex-shrink-0">
+        <!-- SVG logo -->
+      </div>
+      <h2 class="text-base sm:text-lg font-bold leading-tight tracking-tight text-gray-900 dark:text-white truncate">
+        Jhonny Diaz Centeno
+      </h2>
+    </div>
+
+    <!-- Desktop Download Button -->
+    <button 
+      class="group relative flex items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-white dark:bg-transparent text-gray-900 dark:text-white border-2 border-gray-900 dark:border-primary text-sm font-semibold"
+    >
+      <!-- Button content -->
+    </button>
+
+    <!-- Mobile Menu Button -->
+    <button
+      class="lg:hidden p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+    >
+      <!-- Menu icon -->
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="lg:hidden overflow-hidden transition-all duration-300 ease-in-out">
+    <nav class="px-4 py-4 space-y-3 bg-gray-50 dark:bg-background-dark/50 border-t border-gray-200 dark:border-primary/20">
+      <!-- Mobile menu content -->
+    </nav>
+  </div>
+</header>
+```
+
+**Key patterns:**
+- **Backgrounds**: `bg-white/95 dark:bg-background-dark/95` - Semi-transparent backgrounds with backdrop blur
+- **Borders**: `border-gray-200 dark:border-primary/30` - Subtle borders that change in dark mode
+- **Text**: `text-gray-900 dark:text-white` - High contrast text colors
+- **Hover States**: `hover:bg-gray-100 dark:hover:bg-gray-800` - Interactive states for both modes
+
+### Hero Component
+
+The hero section shows text and background adaptations:
+
+```html hero.html
+<section class="w-full">
+  <div class="flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 py-10 items-center">
+    <div class="flex flex-col gap-6 text-center lg:text-left flex-1">
+      <div class="flex flex-col gap-3">
+        <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tighter text-gray-900 dark:text-white">
+          Desarrollador Web 
+        </h1>
+        <p class="text-base md:text-lg font-normal leading-normal text-gray-600 dark:text-gray-300">
+          Desarrollador web en formación con experiencia práctica...
+        </p>
+      </div>
+    </div>
+    
+    <!-- Profile image -->
+    <div class="w-full max-w-md lg:max-w-none lg:w-1/2">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
+        <img src="/images/FotoCurriculum.jpg" alt="Jhonny Diaz Centeno" class="w-full h-full object-contain" />
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+**Key patterns:**
+- **Headings**: `text-gray-900 dark:text-white` - Maximum contrast for readability
+- **Body Text**: `text-gray-600 dark:text-gray-300` - Softer colors for supporting text
+- **Image Containers**: `bg-gray-100 dark:bg-gray-800` - Neutral backgrounds for images
+
+### Projects Component
+
+Project cards demonstrate complex dark mode styling:
+
+```html projects.html
+<section class="py-10">
+  <h2 class="text-2xl font-bold leading-tight tracking-tight px-4 pb-6 text-gray-900 dark:text-white">
+    Proyectos Destacados
+  </h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Project Card -->
+    <div class="flex flex-col rounded-xl overflow-hidden bg-white dark:bg-background-dark shadow-md border border-gray-200 dark:border-primary/20 hover:shadow-lg transition-shadow">
+      <div class="flex flex-col gap-4 p-6 flex-grow">
+        <h3 class="text-lg font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-white">
+          Sistema de Gestión de Inventario
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300 text-sm font-normal leading-normal flex-grow">
+          Aplicación web para administrar el inventario...
+        </p>
+        <p class="text-gray-500 dark:text-gray-400 text-xs font-medium leading-normal">
+          Tecnologías: Angular, Node.js, Docker, SonarCloud, AWS
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3 mt-auto">
+          <a class="flex-1 flex items-center justify-center gap-2 px-4 h-10 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+            <span>Ver Proyecto</span>
+          </a>
+          <a class="flex-1 flex items-center justify-center gap-2 px-4 h-10 bg-gray-900 dark:bg-gray-800 text-white rounded-lg text-sm font-semibold hover:bg-gray-800 dark:hover:bg-gray-700">
+            <span>GitHub</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+**Key patterns:**
+- **Cards**: `bg-white dark:bg-background-dark` - Custom dark background for cards
+- **Borders**: `border-gray-200 dark:border-primary/20` - Accent borders in dark mode
+- **Text Hierarchy**: Multiple shades of gray that adapt to dark mode
+- **Buttons**: `bg-gray-900 dark:bg-gray-800` - Button colors that work in both modes
+
+## Color Opacity
+
+Tailwind allows you to add opacity to colors using the `/` syntax:
+
+```html
+<!-- 95% opacity backgrounds -->
+<div class="bg-white/95 dark:bg-background-dark/95">
+  Semi-transparent background
+</div>
+
+<!-- 30% opacity borders -->
+<div class="border-gray-200 dark:border-primary/30">
+  Subtle border
+</div>
+```
+
+This is particularly useful for:
+- Overlays and backdrops
+- Subtle borders and dividers
+- Glass morphism effects
+
+## Common Dark Mode Patterns
+
+### Text Colors
+
+<CodeGroup>
+```html Headings
+<!-- Maximum contrast for main headings -->
+<h1 class="text-gray-900 dark:text-white">
+  Primary Heading
+</h1>
+```
+
+```html Body Text
+<!-- Comfortable reading color -->
+<p class="text-gray-600 dark:text-gray-300">
+  Body text content
+</p>
+```
+
+```html Muted Text
+<!-- Secondary information -->
+<span class="text-gray-500 dark:text-gray-400">
+  Metadata or labels
+</span>
+```
+</CodeGroup>
+
+### Backgrounds
+
+<CodeGroup>
+```html Page Background
+<!-- Main page background -->
+<body class="bg-white dark:bg-background-dark">
+```
+
+```html Card Background
+<!-- Content cards -->
+<div class="bg-white dark:bg-background-dark">
+```
+
+```html Hover Background
+<!-- Interactive elements -->
+<button class="hover:bg-gray-100 dark:hover:bg-gray-800">
+```
+</CodeGroup>
+
+### Borders
+
+<CodeGroup>
+```html Standard Border
+<!-- Subtle dividers -->
+<div class="border border-gray-200 dark:border-primary/20">
+```
+
+```html Accent Border
+<!-- Emphasized borders -->
+<div class="border-2 border-gray-900 dark:border-primary">
+```
+</CodeGroup>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Always Define Both Modes">
+    When using dark mode, always specify both light and dark variants to ensure consistent appearance:
+    
+    ```html
+    <!-- Good: Both modes specified -->
+    <div class="bg-white dark:bg-background-dark text-gray-900 dark:text-white">
+    
+    <!-- Bad: Only one mode specified -->
+    <div class="bg-white text-gray-900">
+    ```
+  </Accordion>
+
+  <Accordion title="Test Contrast Ratios">
+    Ensure sufficient contrast in both modes for accessibility:
+    - Text should meet WCAG AA standards (4.5:1 for normal text)
+    - Interactive elements should be clearly visible
+    - Test with actual dark backgrounds, not just inverting colors
+  </Accordion>
+
+  <Accordion title="Use Semantic Color Names">
+    Prefer semantic color variables over hard-coded values:
+    
+    ```html
+    <!-- Good: Semantic -->
+    <div class="bg-background-light dark:bg-background-dark">
+    
+    <!-- Less maintainable: Hard-coded -->
+    <div class="bg-gray-50 dark:bg-gray-900">
+    ```
+  </Accordion>
+
+  <Accordion title="Preserve User Preference">
+    Consider persisting the user's dark mode choice:
+    
+    ```ts
+    toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+      // Save preference to localStorage
+      localStorage.setItem('darkMode', 
+        document.documentElement.classList.contains('dark').toString()
+      );
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Tailwind Setup" icon="paintbrush" href="/styling/tailwind-setup">
+    Learn about the complete Tailwind configuration
+  </Card>
+  
+  <Card title="Responsive Design" icon="mobile" href="/styling/responsive-design">
+    Explore responsive design patterns and breakpoints
+  </Card>
+</CardGroup>
