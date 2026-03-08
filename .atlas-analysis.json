@@ -1,0 +1,79 @@
+{
+  "projectType": "frontend",
+  "projectName": "Jhonny Diaz Portfolio",
+  "projectDescription": "A modern, responsive portfolio website built with Angular showcasing web development projects and skills.",
+  "theme": "palm",
+  "primaryColor": "#1173d4",
+  "lightColor": "#f6f7f8",
+  "darkColor": "#101922",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Overview",
+        "pages": [
+          "introduction",
+          "getting-started"
+        ]
+      },
+      {
+        "group": "Architecture",
+        "pages": [
+          "architecture/project-structure",
+          "architecture/components",
+          "architecture/routing"
+        ]
+      },
+      {
+        "group": "Components",
+        "pages": [
+          "components/header",
+          "components/hero",
+          "components/about",
+          "components/projects",
+          "components/contact",
+          "components/footer"
+        ]
+      },
+      {
+        "group": "Styling",
+        "pages": [
+          "styling/tailwind-setup",
+          "styling/dark-mode",
+          "styling/responsive-design"
+        ]
+      },
+      {
+        "group": "Development",
+        "pages": [
+          "development/local-setup",
+          "development/building",
+          "development/testing"
+        ]
+      },
+      {
+        "group": "Deployment",
+        "pages": [
+          "deployment/overview",
+          "deployment/ssr-configuration"
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Responsive design with mobile-first approach",
+    "Dark mode support with persistent theme toggle",
+    "Server-side rendering (SSR) with Angular Universal",
+    "Component-based architecture with standalone components",
+    "Modern UI with Tailwind CSS v4",
+    "Interactive project showcase with live demos"
+  ],
+  "publicApiSurface": [
+    "App (root component)",
+    "Header (navigation component with mobile menu)",
+    "Hero (landing section component)",
+    "About (personal information component)",
+    "Projects (portfolio showcase component)",
+    "Contact (skills display component)",
+    "Footer (footer component)"
+  ]
+}
